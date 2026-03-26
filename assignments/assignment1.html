@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assignment 1 — CO3133</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F9F7F4; --bg2: #F0EDE8; --ink: #1A1814; --ink2: #6B6760;
+      --ink3: #A8A49F; --accent: #C5440A; --accent2: #E8593C;
+      --border: rgba(26,24,20,0.10); --radius: 12px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    header { border-bottom: 1px solid var(--border); padding: 0 48px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: rgba(249,247,244,0.92); backdrop-filter: blur(12px); z-index: 100; }
+    .logo { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--ink); text-decoration: none; letter-spacing: -0.02em; }
+    .logo span { color: var(--accent); }
+    .back-btn { font-size: 13px; font-weight: 500; color: var(--ink2); text-decoration: none; transition: color 0.2s; }
+    .back-btn:hover { color: var(--ink); }
+
+    .page { max-width: 900px; margin: 0 auto; padding: 64px 48px 96px; animation: fadeUp 0.6s ease both; }
+
+    .page-tag { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); border-radius: 20px; padding: 4px 12px; margin-bottom: 20px; }
+    h1 { font-family: 'DM Serif Display', serif; font-size: clamp(28px, 4vw, 44px); line-height: 1.15; letter-spacing: -0.03em; margin-bottom: 16px; }
+    h1 em { font-style: italic; color: var(--accent); }
+    .page-meta { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 32px; }
+    .meta-item { display: flex; flex-direction: column; gap: 2px; }
+    .meta-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink3); }
+    .meta-value { font-size: 13px; font-weight: 500; color: var(--ink); }
+
+    /* Quick links */
+    .quick-links { display: flex; gap: 10px; flex-wrap: wrap; padding: 20px 24px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 56px; }
+    .link-btn { font-size: 13px; font-weight: 500; padding: 7px 16px; border-radius: 8px; text-decoration: none; border: 1px solid var(--border); color: var(--ink2); background: var(--bg); transition: all 0.15s; }
+    .link-btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .link-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .link-btn.primary:hover { background: var(--accent2); border-color: var(--accent2); }
+
+    /* Sections */
+    .section { margin-bottom: 56px; }
+    .section-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .section-num { font-family: 'DM Serif Display', serif; font-size: 13px; color: var(--accent); min-width: 24px; }
+    h2 { font-family: 'DM Serif Display', serif; font-size: 22px; letter-spacing: -0.02em; color: var(--ink); }
+    p { font-size: 15px; color: var(--ink2); line-height: 1.75; margin-bottom: 12px; }
+
+    /* Overview */
+    .overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
+    .overview-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; display: flex; gap: 14px; align-items: flex-start; }
+    .overview-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+    .overview-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+    .overview-sub { font-size: 12px; color: var(--ink3); margin-bottom: 6px; }
+    .overview-models { font-size: 12px; font-weight: 500; color: var(--accent); }
+
+    /* Model cards */
+    .model-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
+    .model-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; transition: box-shadow 0.2s, transform 0.2s; }
+    .model-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .model-card-best { border-color: rgba(197,68,10,0.3); background: #fffcfb; }
+    .model-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .model-name { font-size: 17px; font-weight: 500; color: var(--ink); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .model-desc { font-size: 13px; color: var(--ink2); line-height: 1.6; margin-bottom: 14px; }
+    .model-params { font-size: 11px; color: var(--ink3); }
+    .model-stat { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); }
+    .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink3); }
+    .stat-value { font-size: 16px; font-weight: 500; color: var(--ink); }
+    .stat-value.best { color: var(--accent); }
+    .badge-cnn { background: #EEEDFE; color: #3C3489; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+    .badge-vit { background: #E1F5EE; color: #085041; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+    .best-tag { font-size: 10px; font-weight: 500; background: var(--accent); color: #fff; padding: 2px 7px; border-radius: 20px; }
+
+    /* Results table */
+    .results-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 16px; background: #fff; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+    .results-table th { text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink3); background: var(--bg2); border-bottom: 1px solid var(--border); }
+    .results-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--ink); }
+    .results-table tr:last-child td { border-bottom: none; }
+    .results-table tr:hover td { background: var(--bg); }
+    .best-cell { font-weight: 500; color: var(--accent); }
+
+    /* Video cards */
+    .video-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+    .video-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-decoration: none; color: inherit; display: flex; align-items: center; gap: 16px; transition: box-shadow 0.2s, transform 0.2s; }
+    .video-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .video-play { width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .video-title { font-size: 14px; font-weight: 500; color: var(--ink); }
+    .video-sub { font-size: 12px; color: var(--ink3); margin-top: 2px; }
+
+    footer { border-top: 1px solid var(--border); padding: 32px 48px; text-align: center; font-size: 13px; color: var(--ink3); }
+    footer a { color: var(--ink2); text-decoration: none; }
+    footer a:hover { color: var(--ink); }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 700px) {
+      header, footer { padding: 0 24px; }
+      .page { padding: 40px 24px 64px; }
+      .overview-grid, .model-grid, .video-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="logo" href="index.html"><span>CO3133</span> — Deep Learning</a>
+    <a class="back-btn" href="index.html">← Back</a>
+  </header>
+
+  <div class="page">
+
+    <!-- Hero -->
+    <div class="page-tag">Assignment 01</div>
+    <h1>Image, Text &<br><em>Multimodal</em> Classification</h1>
+    <div class="page-meta">
+      <div class="meta-item">
+        <span class="meta-label">Group</span>
+        <span class="meta-value">Group XX</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Members</span>
+        <span class="meta-value">Nguyen Van A · Tran Thi B · Le Van C · Pham Thi D</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Lecturer</span>
+        <span class="meta-value">Lê Thành Sách</span>
+      </div>
+    </div>
+
+    <!-- Quick links -->
+    <div class="quick-links">
+      <a class="link-btn primary" href="https://youtube.com/watch?v=DEMO_ID" target="_blank">▶ Demo Video</a>
+      <a class="link-btn" href="https://youtube.com/watch?v=REPORT_ID" target="_blank">▶ Report Video</a>
+      <a class="link-btn" href="https://github.com/YOUR_USERNAME/YOUR_REPO" target="_blank">↗ Source Code</a>
+      <a class="link-btn" href="reports/assignment1_slides.pdf" target="_blank">↓ Slide Deck</a>
+    </div>
+
+    <!-- 00: Overview -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2>Overview</h2>
+      </div>
+      <p>This assignment tackles classification tasks across three data modalities:
+         images, text, and multimodal (image + text). For each modality we compare
+         two families of pretrained architectures and analyze their performance differences.</p>
+      <div class="overview-grid">
+        <div class="overview-card">
+          <div class="overview-icon">🖼</div>
+          <div>
+            <div class="overview-title">Image Classification</div>
+            <div class="overview-sub">CIFAR-100 · 100 classes · 50k samples</div>
+            <div class="overview-models">CNN vs Vision Transformer</div>
+          </div>
+        </div>
+        <div class="overview-card">
+          <div class="overview-icon">📝</div>
+          <div>
+            <div class="overview-title">Text Classification</div>
+            <div class="overview-sub">Placeholder dataset</div>
+            <div class="overview-models">RNN vs Transformer</div>
+          </div>
+        </div>
+        <div class="overview-card">
+          <div class="overview-icon">🔀</div>
+          <div>
+            <div class="overview-title">Multimodal Classification</div>
+            <div class="overview-sub">Placeholder dataset</div>
+            <div class="overview-models">Zero-shot vs Few-shot</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Models -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2>Models Used</h2>
+      </div>
+      <p>We select four architectures representing two fundamentally different
+         approaches — CNNs rely on local feature extraction through convolution,
+         while Vision Transformers leverage global self-attention to capture
+         long-range dependencies across the entire image.</p>
+      <div class="model-grid">
+
+        <div class="model-card">
+          <div class="model-header">
+            <span class="badge-cnn">CNN</span>
+            <span class="model-params">23.7M params</span>
+          </div>
+          <div class="model-name">ResNet-50</div>
+          <div class="model-desc">50-layer residual network with skip connections
+            to address vanishing gradients. Pretrained on ImageNet-1k.</div>
+          <div class="model-stat">
+            <span class="stat-label">Test accuracy</span>
+            <span class="stat-value">74.95%</span>
+          </div>
+        </div>
+
+        <div class="model-card">
+          <div class="model-header">
+            <span class="badge-cnn">CNN</span>
+            <span class="model-params">10.8M params</span>
+          </div>
+          <div class="model-name">EfficientNet-B3</div>
+          <div class="model-desc">Compound scaling of depth, width, and resolution.
+            Best accuracy-per-parameter in the CNN family. Pretrained on ImageNet-1k.</div>
+          <div class="model-stat">
+            <span class="stat-label">Test accuracy</span>
+            <span class="stat-value">69.71%</span>
+          </div>
+        </div>
+
+        <div class="model-card">
+          <div class="model-header">
+            <span class="badge-vit">ViT</span>
+            <span class="model-params">27.6M params</span>
+          </div>
+          <div class="model-name">Swin-T</div>
+          <div class="model-desc">Hierarchical Vision Transformer with shifted window
+            attention. Faster than ViT-B/16 with competitive accuracy. Pretrained on ImageNet-1k.</div>
+          <div class="model-stat">
+            <span class="stat-label">Test accuracy</span>
+            <span class="stat-value">86.29%</span>
+          </div>
+        </div>
+
+        <div class="model-card model-card-best">
+          <div class="model-header">
+            <span class="badge-vit">ViT</span>
+            <span class="model-params">85.8M params</span>
+          </div>
+          <div class="model-name">ViT-B/16 <span class="best-tag">Best</span></div>
+          <div class="model-desc">Treats images as 16×16 patch sequences with global
+            self-attention. Pretrained on ImageNet-21k (14M images).</div>
+          <div class="model-stat">
+            <span class="stat-label">Test accuracy</span>
+            <span class="stat-value best">88.84%</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 03: Results -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2>Results</h2>
+      </div>
+      <p>All models fine-tuned with AdamW, layerwise learning rates, and
+         CosineAnnealingLR on a single NVIDIA Tesla T4 GPU. ViT-B/16 achieves
+         the best accuracy (88.84%), outperforming the best CNN (ResNet-50, 74.95%)
+         by 13.9%.</p>
+
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Type</th>
+            <th>Params</th>
+            <th>Epochs</th>
+            <th>Accuracy</th>
+            <th>F1 macro</th>
+            <th>Precision</th>
+            <th>Recall</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ResNet-50</td>
+            <td><span class="badge-cnn">CNN</span></td>
+            <td>23.7M</td>
+            <td>15</td>
+            <td>0.7495</td>
+            <td>0.7473</td>
+            <td>0.7506</td>
+            <td>0.7495</td>
+          </tr>
+          <tr>
+            <td>EfficientNet-B3</td>
+            <td><span class="badge-cnn">CNN</span></td>
+            <td>10.8M</td>
+            <td>15</td>
+            <td>0.6971</td>
+            <td>0.6948</td>
+            <td>0.6979</td>
+            <td>0.6971</td>
+          </tr>
+          <tr>
+            <td>Swin-T</td>
+            <td><span class="badge-vit">ViT</span></td>
+            <td>27.6M</td>
+            <td>10</td>
+            <td>0.8629</td>
+            <td>0.8631</td>
+            <td>0.8645</td>
+            <td>0.8629</td>
+          </tr>
+          <tr>
+            <td><strong>ViT-B/16</strong></td>
+            <td><span class="badge-vit">ViT</span></td>
+            <td>85.8M</td>
+            <td>10</td>
+            <td class="best-cell">0.8884</td>
+            <td class="best-cell">0.8886</td>
+            <td class="best-cell">0.8900</td>
+            <td class="best-cell">0.8884</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Videos -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">—</span>
+        <h2>Videos</h2>
+      </div>
+      <div class="video-grid">
+        <a class="video-card" href="https://youtube.com/watch?v=DEMO_ID" target="_blank">
+          <div class="video-play">▶</div>
+          <div>
+            <div class="video-title">Demo Video</div>
+            <div class="video-sub">Live demonstration of the models</div>
+          </div>
+        </a>
+        <a class="video-card" href="https://youtube.com/watch?v=REPORT_ID" target="_blank">
+          <div class="video-play">▶</div>
+          <div>
+            <div class="video-title">Report Presentation</div>
+            <div class="video-sub">Full walkthrough of results & analysis</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    CO3133 · Assignment 01 · Group XX &nbsp;·&nbsp;
+    <a href="index.html">← Home</a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/YOUR_USERNAME/YOUR_REPO" target="_blank">GitHub ↗</a>
+  </footer>
+
+</body>
+</html>
