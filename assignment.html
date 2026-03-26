@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CO3133 — Deep Learning & Applications</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #F9F7F4;
+      --bg2: #F0EDE8;
+      --ink: #1A1814;
+      --ink2: #6B6760;
+      --ink3: #A8A49F;
+      --accent: #C5440A;
+      --accent2: #E8593C;
+      --border: rgba(26,24,20,0.10);
+      --radius: 12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 0 48px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: rgba(249,247,244,0.92);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 17px;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .logo span { color: var(--accent); }
+
+    nav { display: flex; gap: 28px; }
+    nav a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink2);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--ink); }
+
+    .hero {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 100px 48px 80px;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 20px;
+      padding: 4px 12px;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(38px, 6vw, 62px);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+
+    .hero h1 em { font-style: italic; color: var(--accent); }
+
+    .hero p {
+      font-size: 17px;
+      color: var(--ink2);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+
+    .hero-meta { display: flex; gap: 32px; flex-wrap: wrap; }
+    .meta-item { display: flex; flex-direction: column; gap: 2px; }
+    .meta-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink3); }
+    .meta-value { font-size: 14px; font-weight: 500; color: var(--ink); }
+
+    .divider {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 48px;
+      border-top: 1px solid var(--border);
+    }
+
+    section {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 64px 48px;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      margin-bottom: 32px;
+    }
+
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .member-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .member-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+    }
+
+    .member-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent2);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .member-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+    .member-id   { font-size: 12px; color: var(--ink3); margin-top: 2px; }
+
+    .assignments { display: flex; flex-direction: column; gap: 16px; }
+
+    .assignment-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: start;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .assignment-card:hover {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+
+    .assignment-number {
+      font-family: 'DM Serif Display', serif;
+      font-size: 13px;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .assignment-title {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .assignment-desc {
+      font-size: 14px;
+      color: var(--ink2);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .assignment-links { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .link-btn {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      color: var(--ink2);
+      background: var(--bg);
+      transition: all 0.15s;
+    }
+
+    .link-btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .link-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .link-btn.primary:hover { background: var(--accent2); border-color: var(--accent2); }
+
+    .assignment-badge {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .badge-done { background: #E6F3E6; color: #2D6A2D; }
+    .badge-wip  { background: #FEF3E2; color: #A05A00; }
+    .badge-todo { background: var(--bg2); color: var(--ink3); }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--ink3);
+    }
+
+    footer a { color: var(--ink2); text-decoration: none; }
+    footer a:hover { color: var(--ink); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      header, footer { padding: 0 24px; }
+      .hero, section { padding-left: 24px; padding-right: 24px; }
+      .assignment-card { grid-template-columns: 1fr; }
+      nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="logo" href="#"><span>CO3133</span> — Deep Learning</a>
+    <nav>
+      <a href="#members">Members</a>
+      <a href="#assignments">Assignments</a>
+      <a href="https://github.com/YOUR_USERNAME/YOUR_REPO" target="_blank">GitHub ↗</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div class="hero-tag">Academic Year 2025–2026 · Semester 2</div>
+    <h1>Deep Learning<br>& <em>Applications</em></h1>
+    <p>Course project repository for CO3133. </p>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <span class="meta-label">Course</span>
+        <span class="meta-value">CO3133</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Lecturer</span>
+        <span class="meta-value">Lê Thành Sách</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Group</span>
+        <span class="meta-value">Group XX</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">University</span>
+        <span class="meta-value">Ho Chi Minh University of Technology</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <section id="members">
+    <div class="section-label">Team members</div>
+    <div class="members-grid">
+      <div class="member-card">
+        <!-- <div class="member-avatar">NA</div> -->
+        <div class="member-name">Phạm Trương Anh Huy</div>
+        <div class="member-id">2xxxxxx</div>
+      </div>
+      <div class="member-card">
+        <!-- <div class="member-avatar">TB</div> -->
+        <div class="member-name">Đoàn Võ Việt Khôi</div>
+        <div class="member-id">2xxxxxx</div>
+      </div>
+      <div class="member-card">
+        <!-- <div class="member-avatar">LC</div> -->
+        <div class="member-name">Nguyễn Mạnh Thi</div>
+        <div class="member-id">2313205</div>
+      </div>
+      <!-- <div class="member-card">
+        <div class="member-avatar">PD</div>
+        <div class="member-name">Pham Thi D</div>
+        <div class="member-id">2xxxxxx</div>
+      </div> -->
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="assignments">
+    <div class="section-label">Assignments</div>
+    <div class="assignments">
+
+      <div class="assignment-card">
+        <div>
+          <div class="assignment-number">Assignment 01</div>
+          <div class="assignment-title">Image, Text & Multimodal Classification</div>
+          <div class="assignment-desc">
+            Classification on CIFAR-100 (CNN vs ViT), text dataset (RNN vs Transformer),
+            and multimodal dataset (zero-shot vs few-shot) using pretrained architectures.
+          </div>
+          <div class="assignment-links">
+            <a class="link-btn primary" href="assignments/assignment1.html">View Details</a>
+            <a class="link-btn" href="https://github.com/YOUR_USERNAME/YOUR_REPO" target="_blank">↗ Code</a>
+            <a class="link-btn" href="https://youtube.com/watch?v=DEMO_ID" target="_blank">▶ Demo</a>
+            <a class="link-btn" href="https://youtube.com/watch?v=REPORT_ID" target="_blank">▶ Report Video</a>
+          </div>
+        </div>
+        <span class="assignment-badge badge-done">In progress...</span>
+      </div>
+
+      <div class="assignment-card" style="opacity:0.45; pointer-events:none;">
+        <div>
+          <div class="assignment-number">Assignment 02</div>
+          <div class="assignment-title">Coming soon</div>
+          <div class="assignment-desc">To be announced.</div>
+        </div>
+        <span class="assignment-badge badge-todo">Upcoming</span>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    CO3133 · Group XX · HCMUT &nbsp;·&nbsp;
+    <a href="https://github.com/YOUR_USERNAME/YOUR_REPO" target="_blank">GitHub</a>
+    &nbsp;·&nbsp;
+    Lecturer: Lê Thành Sách
+  </footer>
+
+</body>
+</html>
