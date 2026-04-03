@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assignment 1 — News Classification Report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F9F7F4; --bg2: #F0EDE8; --ink: #1A1814; --ink2: #6B6760;
+      --ink3: #A8A49F; --accent: #C5440A; --accent2: #E8593C;
+      --border: rgba(26,24,20,0.10); --radius: 12px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    header { border-bottom: 1px solid var(--border); padding: 0 48px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: rgba(249,247,244,0.92); backdrop-filter: blur(12px); z-index: 100; }
+    .logo { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--ink); text-decoration: none; letter-spacing: -0.02em; }
+    .logo span { color: var(--accent); }
+    .back-btn { font-size: 13px; font-weight: 500; color: var(--ink2); text-decoration: none; transition: color 0.2s; }
+    .back-btn:hover { color: var(--ink); }
+
+    .page { max-width: 900px; margin: 0 auto; padding: 64px 48px 96px; animation: fadeUp 0.6s ease both; }
+
+    .page-tag { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); border-radius: 20px; padding: 4px 12px; margin-bottom: 20px; }
+    h1 { font-family: 'DM Serif Display', serif; font-size: clamp(28px, 4vw, 44px); line-height: 1.15; letter-spacing: -0.03em; margin-bottom: 16px; }
+    h1 em { font-style: italic; color: var(--accent); }
+    .page-meta { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 32px; }
+    .meta-item { display: flex; flex-direction: column; gap: 2px; }
+    .meta-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink3); }
+    .meta-value { font-size: 13px; font-weight: 500; color: var(--ink); }
+
+    /* Sections */
+    .section { margin-bottom: 56px; }
+    .section-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .section-num { font-family: 'DM Serif Display', serif; font-size: 13px; color: var(--accent); min-width: 24px; }
+    h2 { font-family: 'DM Serif Display', serif; font-size: 22px; letter-spacing: -0.02em; color: var(--ink); }
+    p { font-size: 15px; color: var(--ink2); line-height: 1.75; margin-bottom: 12px; }
+
+    /* Overview */
+    .overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
+    .overview-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; display: flex; gap: 14px; align-items: flex-start; }
+    .overview-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+    .overview-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+    .overview-sub { font-size: 12px; color: var(--ink3); margin-bottom: 6px; }
+    .overview-models { font-size: 12px; font-weight: 500; color: var(--accent); }
+
+    /* Model cards */
+    .model-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
+    .model-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; transition: box-shadow 0.2s, transform 0.2s; }
+    .model-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .model-card-best { border-color: rgba(197,68,10,0.3); background: #fffcfb; }
+    .model-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .model-name { font-size: 17px; font-weight: 500; color: var(--ink); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .model-desc { font-size: 13px; color: var(--ink2); line-height: 1.6; margin-bottom: 14px; }
+    .model-params { font-size: 11px; color: var(--ink3); }
+    .model-stat { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); }
+    .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink3); }
+    .stat-value { font-size: 16px; font-weight: 500; color: var(--ink); }
+    .stat-value.best { color: var(--accent); }
+    .badge-rnn { background: #EEEDFE; color: #3C3489; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+    .badge-trans { background: #E1F5EE; color: #085041; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+    .best-tag { font-size: 10px; font-weight: 500; background: var(--accent); color: #fff; padding: 2px 7px; border-radius: 20px; }
+
+    /* Results table */
+    .results-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 16px; background: #fff; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+    .results-table th { text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink3); background: var(--bg2); border-bottom: 1px solid var(--border); }
+    .results-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--ink); }
+    .results-table tr:last-child td { border-bottom: none; }
+    .results-table tr:hover td { background: var(--bg); }
+    .best-cell { font-weight: 500; color: var(--accent); }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 700px) {
+      header, footer { padding: 0 24px; }
+      .page { padding: 40px 24px 64px; }
+      .overview-grid, .model-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="logo" href="#"><span>CO3133</span> — Deep Learning</a>
+    <a class="back-btn" href="#">← Back</a>
+  </header>
+
+  <div class="page">
+    <div class="page-tag">Report 01</div>
+    <h1>Text Classification for<br><em>News Categories</em></h1>
+    
+    <div class="page-meta">
+      <div class="meta-item">
+        <span class="meta-label">Dataset</span>
+        <span class="meta-value">News Category Dataset v3</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Task</span>
+        <span class="meta-value">Multi-class classification (7 labels)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Platform</span>
+        <span class="meta-value">PyTorch & Transformers</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2>Overview</h2>
+      </div>
+      <p>This study benchmarks four distinct neural architectures for text classification using a filtered subset of the News Category Dataset. We evaluate traditional sequence models against modern Transformer-based approaches to identify the best trade-off between performance and training efficiency.</p>
+      
+      <div class="overview-grid">
+        <div class="overview-card">
+          <div class="overview-icon">📰</div>
+          <div>
+            <div class="overview-title">Data Source</div>
+            <div class="overview-sub">106k news items</div>
+            <div class="overview-models">Headline + Description</div>
+          </div>
+        </div>
+        <div class="overview-card">
+          <div class="overview-icon">📊</div>
+          <div>
+            <div class="overview-title">Class Labels</div>
+            <div class="overview-sub">7 core categories</div>
+            <div class="overview-models">Politics, Wellness, etc.</div>
+          </div>
+        </div>
+        <div class="overview-card">
+          <div class="overview-icon">⚡</div>
+          <div>
+            <div class="overview-title">Evaluation</div>
+            <div class="overview-sub">Accuracy & Time</div>
+            <div class="overview-models">T4 GPU Backend</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2>Architectures Compared</h2>
+      </div>
+      <p>We implemented four models representing evolutionary steps in NLP: simple sequence processing (LSTM), local feature extraction (CNN), hybrid modeling (RCNN), and global self-attention (DistilBERT).</p>
+      
+      <div class="model-grid">
+        <div class="model-card">
+          <div class="model-header">
+            <span class="badge-rnn">RNN</span>
+            <span class="model-params">Bi-LSTM</span>
+          </div>
+          <div class="model-name">LSTMModel</div>
+          <div class="model-desc">Bidirectional Long Short-Term Memory network capturing temporal dependencies across the text sequence.</div>
+          <div class="model-stat">
+            <span class="stat-label">Accuracy</span>
+            <span class="stat-value">84.07%</span>
+          </div>
+        </div>
+
+        <div class="model-card">
+          <div class="model-header">
+            <span class="badge-rnn">CNN</span>
+            <span class="model-params">Multi-kernel</span>
+          </div>
+          <div class="model-name">CNNModel</div>
+          <div class="model-desc">Utilizes multiple filter sizes to extract local n-gram features from word embeddings.</div>
+          <div class="model-stat">
+            <span class="stat-label">Accuracy</span>
+            <span class="stat-value">81.56%</span>
+          </div>
+        </div>
+
+        <div class="model-card">
+          <div class="model-header">
+            <span class="badge-rnn">Hybrid</span>
+            <span class="model-params">Recurrent CNN</span>
+          </div>
+          <div class="model-name">RCNNModel</div>
+          <div class="model-desc">Combines RNN's context-aware embeddings with CNN's max-pooling for enhanced feature selection.</div>
+          <div class="model-stat">
+            <span class="stat-label">Accuracy</span>
+            <span class="stat-value">85.40%</span>
+          </div>
+        </div>
+
+        <div class="model-card model-card-best">
+          <div class="model-header">
+            <span class="badge-trans">TRANSFORMER</span>
+            <span class="model-params">Pre-trained</span>
+          </div>
+          <div class="model-name">DistilBERT <span class="best-tag">Best</span></div>
+          <div class="model-desc">Leverages pre-trained knowledge from BERT via knowledge distillation. Uncased variant.</div>
+          <div class="model-stat">
+            <span class="stat-label">Accuracy</span>
+            <span class="stat-value best">88.64%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2>Comparative Results</h2>
+      </div>
+      <p>Experimental results indicate that pre-trained Transformer models significantly outperform custom-trained sequence models. However, the custom RCNN model shows strong performance while being significantly faster to train than fine-tuning a full Transformer.</p>
+
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Model Name</th>
+            <th>Accuracy</th>
+            <th>Training Time (sec)</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>CNN</td>
+            <td>0.8156</td>
+            <td>497.68</td>
+            <td>Local Feature</td>
+          </tr>
+          <tr>
+            <td>LSTM</td>
+            <td>0.8407</td>
+            <td>490.72</td>
+            <td>Sequential</td>
+          </tr>
+          <tr>
+            <td>RCNN</td>
+            <td>0.8540</td>
+            <td>496.89</td>
+            <td>Hybrid</td>
+          </tr>
+          <tr>
+            <td><strong>DistilBERT (Uncased)</strong></td>
+            <td class="best-cell">0.8864</td>
+            <td>4091.19</td>
+            <td>Transformer</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer style="padding: 32px 48px; text-align: center; font-size: 13px; color: var(--ink3); border-top: 1px solid var(--border);">
+    CO3133 · Deep Learning Assignment Report · March 2026
+  </footer>
+
+</body>
+</html>
