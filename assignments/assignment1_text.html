@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Assignment 1 — News Classification Report</title>
+  <title>Assignment 01 · Text — CO3133</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
   <style>
@@ -74,6 +74,15 @@
 
     @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
+    .assignment-parts {
+      display: flex; gap: 8px 16px; flex-wrap: wrap; align-items: center;
+      font-size: 13px; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+    }
+    .assignment-parts span { color: var(--ink3); }
+    .assignment-parts a { font-weight: 500; color: var(--ink2); text-decoration: none; }
+    .assignment-parts a:hover { color: var(--accent); }
+    .assignment-parts .current { color: var(--accent); font-weight: 600; }
+
     @media (max-width: 700px) {
       header, footer { padding: 0 24px; }
       .page { padding: 40px 24px 64px; }
@@ -84,12 +93,20 @@
 <body>
 
   <header>
-    <a class="logo" href="#"><span>CO3133</span> — Deep Learning</a>
-    <a class="back-btn" href="#">← Back</a>
+    <a class="logo" href="../index.html"><span>CO3133</span> — Deep Learning</a>
+    <a class="back-btn" href="../index.html#assignments">← Back</a>
   </header>
 
   <div class="page">
-    <div class="page-tag">Report 01</div>
+
+    <nav class="assignment-parts" aria-label="Assignment 01 parts">
+      <span>Assignment 01 ·</span>
+      <a href="assignment1_img.html">Image</a>
+      <span class="current">Text</span>
+      <a href="assignment1_multi.html">Multimodal</a>
+    </nav>
+
+    <div class="page-tag">Assignment 01 · Text classification</div>
     <h1>Text Classification for<br><em>News Categories</em></h1>
     
     <div class="page-meta">

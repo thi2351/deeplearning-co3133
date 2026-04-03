@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assignment 01 · Multimodal — CO3133</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F9F7F4; --bg2: #F0EDE8; --ink: #1A1814; --ink2: #6B6760;
+      --ink3: #A8A49F; --accent: #C5440A; --accent2: #E8593C;
+      --border: rgba(26,24,20,0.10); --radius: 12px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    header { border-bottom: 1px solid var(--border); padding: 0 48px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: rgba(249,247,244,0.92); backdrop-filter: blur(12px); z-index: 100; }
+    .logo { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--ink); text-decoration: none; letter-spacing: -0.02em; }
+    .logo span { color: var(--accent); }
+    .back-btn { font-size: 13px; font-weight: 500; color: var(--ink2); text-decoration: none; transition: color 0.2s; }
+    .back-btn:hover { color: var(--ink); }
+
+    .page { max-width: 900px; margin: 0 auto; padding: 64px 48px 96px; animation: fadeUp 0.6s ease both; }
+
+    .assignment-parts {
+      display: flex; gap: 8px 16px; flex-wrap: wrap; align-items: center;
+      font-size: 13px; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+    }
+    .assignment-parts span { color: var(--ink3); }
+    .assignment-parts a { font-weight: 500; color: var(--ink2); text-decoration: none; }
+    .assignment-parts a:hover { color: var(--accent); }
+    .assignment-parts .current { color: var(--accent); font-weight: 600; }
+
+    .page-tag { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); border-radius: 20px; padding: 4px 12px; margin-bottom: 20px; }
+    h1 { font-family: 'DM Serif Display', serif; font-size: clamp(28px, 4vw, 44px); line-height: 1.15; letter-spacing: -0.03em; margin-bottom: 16px; }
+    h1 em { font-style: italic; color: var(--accent); }
+
+    .placeholder-box {
+      background: #fff; border: 1px dashed var(--border); border-radius: var(--radius);
+      padding: 32px 28px; text-align: center; margin-top: 24px;
+    }
+    .placeholder-box p { font-size: 15px; color: var(--ink2); max-width: 520px; margin: 0 auto 12px; }
+    .placeholder-note { font-size: 13px; color: var(--ink3); }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+    footer { padding: 32px 48px; text-align: center; font-size: 13px; color: var(--ink3); border-top: 1px solid var(--border); }
+    footer a { color: var(--ink2); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    @media (max-width: 700px) {
+      header, footer { padding-left: 24px; padding-right: 24px; }
+      .page { padding: 40px 24px 64px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="logo" href="../index.html"><span>CO3133</span> — Deep Learning</a>
+    <a class="back-btn" href="../index.html#assignments">← Back</a>
+  </header>
+
+  <div class="page">
+
+    <nav class="assignment-parts" aria-label="Assignment 01 parts">
+      <span>Assignment 01 ·</span>
+      <a href="assignment1_img.html">Image</a>
+      <a href="assignment1_text.html">Text</a>
+      <span class="current">Multimodal</span>
+    </nav>
+
+    <div class="page-tag">Assignment 01 · Multimodal (placeholder)</div>
+    <h1><em>Multimodal</em> classification</h1>
+    <p style="font-size:15px;color:var(--ink2);max-width:640px;line-height:1.75;">
+      This page will host the multimodal track (e.g. image + text): dataset description, models (zero-shot vs few-shot), and results — aligned with the same Assignment&nbsp;01 scope as Image and Text.
+    </p>
+
+    <div class="placeholder-box">
+      <p><strong>Content coming soon.</strong></p>
+      <p class="placeholder-note">Replace this block with your report sections, figures, and tables when the multimodal experiment is ready.</p>
+    </div>
+  </div>
+
+  <footer>
+    CO3133 · Assignment 01 · Multimodal placeholder &nbsp;·&nbsp;
+    <a href="../index.html">← Home</a>
+  </footer>
+
+</body>
+</html>

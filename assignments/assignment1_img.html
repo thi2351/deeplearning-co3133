@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Assignment 1 — CO3133</title>
+  <title>Assignment 01 · Image — CO3133</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
   <style>
@@ -93,6 +93,15 @@
 
     @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
+    .assignment-parts {
+      display: flex; gap: 8px 16px; flex-wrap: wrap; align-items: center;
+      font-size: 13px; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+    }
+    .assignment-parts span { color: var(--ink3); }
+    .assignment-parts a { font-weight: 500; color: var(--ink2); text-decoration: none; }
+    .assignment-parts a:hover { color: var(--accent); }
+    .assignment-parts .current { color: var(--accent); font-weight: 600; }
+
     @media (max-width: 700px) {
       header, footer { padding: 0 24px; }
       .page { padding: 40px 24px 64px; }
@@ -103,15 +112,22 @@
 <body>
 
   <header>
-    <a class="logo" href="index.html"><span>CO3133</span> — Deep Learning</a>
-    <a class="back-btn" href="index.html">← Back</a>
+    <a class="logo" href="../index.html"><span>CO3133</span> — Deep Learning</a>
+    <a class="back-btn" href="../index.html#assignments">← Back</a>
   </header>
 
   <div class="page">
 
+    <nav class="assignment-parts" aria-label="Assignment 01 parts">
+      <span>Assignment 01 ·</span>
+      <span class="current">Image</span>
+      <a href="assignment1_text.html">Text</a>
+      <a href="assignment1_multi.html">Multimodal</a>
+    </nav>
+
     <!-- Hero -->
-    <div class="page-tag">Assignment 01</div>
-    <h1>Image, Text &<br><em>Multimodal</em> Classification</h1>
+    <div class="page-tag">Assignment 01 · Image classification</div>
+    <h1><em>Image</em> Classification<br>CIFAR-100</h1>
     <div class="page-meta">
       <div class="meta-item">
         <span class="meta-label">Group</span>
@@ -141,32 +157,31 @@
         <span class="section-num">01</span>
         <h2>Overview</h2>
       </div>
-      <p>This assignment tackles classification tasks across three data modalities:
-         images, text, and multimodal (image + text). For each modality we compare
-         two families of pretrained architectures and analyze their performance differences.</p>
+      <p>This part of Assignment&nbsp;01 focuses on <strong>image classification</strong> on CIFAR-100.
+         We compare CNN and Vision Transformer families using pretrained backbones and report test accuracy.</p>
       <div class="overview-grid">
         <div class="overview-card">
           <div class="overview-icon">🖼</div>
           <div>
-            <div class="overview-title">Image Classification</div>
-            <div class="overview-sub">CIFAR-100 · 100 classes · 50k samples</div>
-            <div class="overview-models">CNN vs Vision Transformer</div>
+            <div class="overview-title">Dataset</div>
+            <div class="overview-sub">CIFAR-100 · 100 classes</div>
+            <div class="overview-models">32×32 RGB → resized for model input</div>
           </div>
         </div>
         <div class="overview-card">
-          <div class="overview-icon">📝</div>
+          <div class="overview-icon">⚖️</div>
           <div>
-            <div class="overview-title">Text Classification</div>
-            <div class="overview-sub">Placeholder dataset</div>
-            <div class="overview-models">RNN vs Transformer</div>
+            <div class="overview-title">Families compared</div>
+            <div class="overview-sub">Convolutional vs attention</div>
+            <div class="overview-models">ResNet, EfficientNet, Swin, ViT</div>
           </div>
         </div>
         <div class="overview-card">
-          <div class="overview-icon">🔀</div>
+          <div class="overview-icon">📈</div>
           <div>
-            <div class="overview-title">Multimodal Classification</div>
-            <div class="overview-sub">Placeholder dataset</div>
-            <div class="overview-models">Zero-shot vs Few-shot</div>
+            <div class="overview-title">Goal</div>
+            <div class="overview-sub">Strong test accuracy</div>
+            <div class="overview-models">Fine-tune with AdamW + cosine LR</div>
           </div>
         </div>
       </div>
@@ -340,7 +355,7 @@
 
   <footer>
     CO3133 · Assignment 01 · Group XX &nbsp;·&nbsp;
-    <a href="index.html">← Home</a>
+    <a href="../index.html">← Home</a>
     &nbsp;·&nbsp;
     <a href="https://github.com/YOUR_USERNAME/YOUR_REPO" target="_blank">GitHub ↗</a>
   </footer>

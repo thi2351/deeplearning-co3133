@@ -51,7 +51,7 @@ desktop.ini
 ImageClassification/data/
 
 # —— ML: checkpoint nặng (bỏ comment nếu muốn đẩy .pth lên Git / dùng Git LFS) ——
-ImageClassification/checkpoint/*.pth
+# ImageClassification/checkpoint/*.pth
 ImageClassification/outputs/
 
 # —— Logs & experiment tools ——
