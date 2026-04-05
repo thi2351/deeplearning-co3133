@@ -503,3 +503,98 @@ body {
     display: none;
   }
 }
+
+/* —— Tabs (ảnh + văn bản) —— */
+.demo-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.demo-tab {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--ink2);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.demo-tab:hover {
+  color: var(--ink);
+  border-color: rgba(197, 68, 10, 0.35);
+}
+
+.demo-tab--active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.demo-tab--active:hover {
+  color: #fff;
+  border-color: var(--accent2);
+  background: var(--accent2);
+}
+
+/* —— Text demo —— */
+.demo-inline-code {
+  font-size: 12px;
+  background: var(--bg2);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--ink);
+}
+
+.demo-textarea {
+  width: 100%;
+  min-height: 160px;
+  margin-top: 8px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--ink);
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.demo-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(197, 68, 10, 0.12);
+}
+
+.demo-sample-grid--text {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+.demo-sample-tile--text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  min-height: 128px;
+  padding: 14px 14px 12px;
+  width: 100%;
+}
+
+.demo-sample-tile--text .demo-sample-text-prev {
+  font-size: 13px;
+  color: var(--ink2);
+  line-height: 1.45;
+  flex: 1;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.demo-sample-tile--text .demo-sample-cap {
+  margin-top: auto;
+}

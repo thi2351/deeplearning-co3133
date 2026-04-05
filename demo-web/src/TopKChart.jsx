@@ -34,7 +34,7 @@ export function TopKChart({ rows }) {
           return (
             <g key={row.id}>
               <text x={0} y={y + 12} className="demo-chart-label" fontSize="11">
-                {truncate(row.name, 18)}
+                {truncate(row.name, 22)}
               </text>
               <rect
                 x={BAR_X}

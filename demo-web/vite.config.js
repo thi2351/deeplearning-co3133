@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
-    /** Tránh tự đổi 5173→5174: mở nhầm cổng cũ sẽ GET /api/* trúng app khác → 404 HTML. */
+    /** Keep 5173 fixed so bookmarks match the dev proxy (avoids stale ports returning HTML). */
     strictPort: true,
     proxy: {
       "/api": {

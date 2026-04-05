@@ -1,0 +1,47 @@
+[
+  {
+    "id": 0,
+    "text": "Senators debated the infrastructure bill late into the night as party leaders traded amendments on spending and oversight.",
+    "label": "POLITICS"
+  },
+  {
+    "id": 1,
+    "text": "Meditation and sleep hygiene: ten small habits that improved my energy levels without expensive supplements.",
+    "label": "WELLNESS"
+  },
+  {
+    "id": 2,
+    "text": "Streaming platform announces limited series starring award-winning cast; first trailer drops next week.",
+    "label": "ENTERTAINMENT"
+  },
+  {
+    "id": 3,
+    "text": "Budget airlines add new routes to coastal cities; travelers share tips on off-season hotel deals.",
+    "label": "TRAVEL"
+  },
+  {
+    "id": 4,
+    "text": "Runway recap: designers leaned into oversized tailoring and metallic accents for the spring collection.",
+    "label": "STYLE & BEAUTY"
+  },
+  {
+    "id": 5,
+    "text": "Pediatricians weigh in on screen time guidelines and how families can set boundaries without conflict.",
+    "label": "PARENTING"
+  },
+  {
+    "id": 6,
+    "text": "New study links walking pace to heart health; experts stress consistency over intensity for most adults.",
+    "label": "HEALTHY LIVING"
+  },
+  {
+    "id": 7,
+    "text": "City council race tightens after candidate forum on housing policy and public transit funding.",
+    "label": "POLITICS"
+  },
+  {
+    "id": 8,
+    "text": "Film festival audience award goes to debut director whose documentary explores independent music scenes.",
+    "label": "ENTERTAINMENT"
+  }
+]

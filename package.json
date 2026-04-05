@@ -1,0 +1,9 @@
+{
+  "name": "deeplearning-co3133",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix demo-web",
+    "build": "npm run build --prefix demo-web",
+    "preview": "npm run preview --prefix demo-web"
+  }
+}

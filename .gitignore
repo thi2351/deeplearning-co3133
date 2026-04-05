@@ -32,7 +32,7 @@ htmlcov/
 node_modules/
 **/node_modules/
 
-# —— Env & local secrets (giữ .env.example / .env.development nếu cần commit mẫu) ——
+# —— Env & local secrets ——
 .env
 .env.local
 .env.*.local
@@ -50,7 +50,7 @@ desktop.ini
 # —— ML: dataset tải về (CIFAR-100 ~170MB+) ——
 ImageClassification/data/
 
-# —— ML: checkpoint nặng (bỏ comment nếu muốn đẩy .pth lên Git / dùng Git LFS) ——
+# —— ML checkpoints (uncomment to track .pth or use Git LFS) ——
 ImageClassification/checkpoint/*.pth
 ImageClassification/outputs/
 TextClassification/models/*.pth

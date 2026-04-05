@@ -1,0 +1,12 @@
+# Full stack: Flask demo API + ImageClassification + TextClassification
+flask>=3.0
+torch>=2.0
+torchvision
+timm>=1.0
+torchmetrics>=1.0
+matplotlib
+numpy
+pandas
+scikit-learn
+transformers>=4.36
+safetensors>=0.4
