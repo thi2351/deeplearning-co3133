@@ -5,3 +5,4 @@ torchmetrics>=1.0
 matplotlib
 numpy
 pandas
+scikit-learn

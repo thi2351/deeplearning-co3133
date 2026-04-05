@@ -26,10 +26,19 @@ HEAD_LR = 1e-4
 BACKBONE_LR = 1e-5
 WEIGHT_DECAY = 1e-4
 LABEL_SMOOTHING = 0.1
-# Huấn luyện tối đa EPOCHS vòng; dừng sớm nếu val_acc không cải thiện (early stopping).
-EPOCHS = 40
-EARLY_STOP_PATIENCE = 6
-EARLY_STOP_MIN_DELTA = 1e-4
+# Số epoch cố định theo kiến trúc (khớp báo cáo: CNN 15, ViT 10). Không early stopping.
+EPOCHS_BY_ARCH = {
+    "resnet50": 15,
+    "efficientnet_b3": 15,
+    "swin_tiny_patch4_window7_224": 10,
+    "vit_base_patch16_224": 10,
+}
+
+
+def epochs_for_arch(arch: str) -> int:
+    if arch not in EPOCHS_BY_ARCH:
+        raise ValueError(f"Unknown arch {arch!r}; add to EPOCHS_BY_ARCH in config.py")
+    return EPOCHS_BY_ARCH[arch]
 
 # torchvision.datasets.CIFAR100 fine labels, index 0..99 — no download needed for inference
 CIFAR100_CLASS_NAMES = (

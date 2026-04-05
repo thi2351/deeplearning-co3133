@@ -13,19 +13,15 @@ from src.config import (
     BACKBONE_LR,
     BATCH_SIZE,
     CHECKPOINT_DIR,
-    EARLY_STOP_MIN_DELTA,
-    EARLY_STOP_PATIENCE,
-    EPOCHS,
     HEAD_LR,
     IMG_SIZE,
     LABEL_SMOOTHING,
     PRETRAINED,
     VAL_SPLIT,
     WEIGHT_DECAY,
+    epochs_for_arch,
 )
 from src.model import get_optimizer_groups
-
-# ── Training loop ────────────────────────────────────────────────────────────
 
 
 def train_one_epoch(model, loader, optimizer, criterion, device):
@@ -67,9 +63,6 @@ def _save_checkpoint(path: Path, arch: str, num_classes: int, model: nn.Module):
     torch.save(payload, path)
 
 
-# ── Main train function ──────────────────────────────────────────────────────
-
-
 def train(
     model,
     train_loader,
@@ -82,22 +75,15 @@ def train(
     label_smoothing=None,
     weight_decay=None,
     checkpoint_dir=None,
-    early_stop_patience=None,
-    early_stop_min_delta=None,
+    min_delta=1e-4,
 ):
-    epochs = EPOCHS if epochs is None else epochs
+    """Train for exactly ``epochs`` passes; no early stopping. Keeps best val_acc checkpoint."""
+    if epochs is None:
+        epochs = epochs_for_arch(arch)
     head_lr = HEAD_LR if head_lr is None else head_lr
     backbone_lr = BACKBONE_LR if backbone_lr is None else backbone_lr
     label_smoothing = LABEL_SMOOTHING if label_smoothing is None else label_smoothing
     weight_decay = WEIGHT_DECAY if weight_decay is None else weight_decay
-    stop_patience = (
-        EARLY_STOP_PATIENCE if early_stop_patience is None else early_stop_patience
-    )
-    min_delta = (
-        EARLY_STOP_MIN_DELTA
-        if early_stop_min_delta is None
-        else early_stop_min_delta
-    )
 
     checkpoint_dir = Path(checkpoint_dir or CHECKPOINT_DIR)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -110,16 +96,10 @@ def train(
 
     best_acc = 0.0
     history = {"train_loss": [], "val_acc": [], "val_f1": []}
-    epochs_no_improve = 0
-    stopped_early = False
 
     print(f"\n{'─' * 55}")
     print(f"  Training : {arch}  |  device: {device}")
-    print(
-        f"  Epochs (max): {epochs}  |  early_stop patience: {stop_patience}"
-        if stop_patience > 0
-        else f"  Epochs: {epochs}  |  early stopping: off"
-    )
+    print(f"  Fixed epochs: {epochs} (no early stopping)")
     print(f"  head_lr: {head_lr}  |  backbone_lr: {backbone_lr}")
     print(f"{'─' * 55}")
 
@@ -145,29 +125,16 @@ def train(
 
         if improved:
             best_acc = val_acc
-            epochs_no_improve = 0
             _save_checkpoint(best_path, arch, num_classes, model)
-        else:
-            epochs_no_improve += 1
-            if stop_patience > 0 and epochs_no_improve >= stop_patience:
-                print(
-                    f"  Early stopping: val_acc không vượt best ({best_acc:.4f}) "
-                    f"sau {stop_patience} epoch liên tiếp."
-                )
-                stopped_early = True
-                break
 
     print(f"{'─' * 55}")
-    stop_note = " (early stop)" if stopped_early else ""
-    print(
-        f"  Best val_acc: {best_acc:.4f}{stop_note}  |  saved to {best_path}"
-    )
+    print(f"  Best val_acc: {best_acc:.4f}  |  saved to {best_path}")
     return history
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Train CIFAR-100 classifiers. Defaults come from src/config.py."
+        description="Train CIFAR-100: fixed 15 epochs (CNN) or 10 (ViT); no early stopping."
     )
     parser.add_argument(
         "--arch",
@@ -182,20 +149,8 @@ def main():
     parser.add_argument(
         "--epochs",
         type=int,
-        default=EPOCHS,
-        help="Số epoch tối đa; có thể dừng sớm nếu bật early stopping.",
-    )
-    parser.add_argument(
-        "--early-stop-patience",
-        type=int,
-        default=EARLY_STOP_PATIENCE,
-        help="Dừng nếu val_acc không cải thiện trong nhiều epoch liên tiếp; 0 = tắt.",
-    )
-    parser.add_argument(
-        "--early-stop-min-delta",
-        type=float,
-        default=EARLY_STOP_MIN_DELTA,
-        help="Ngưỡng cải thiện val_acc tối thiểu để coi là epoch tốt hơn.",
+        default=None,
+        help="Ghi đè số epoch cố định (mặc định: 15 cho CNN, 10 cho ViT).",
     )
     parser.add_argument("--batch-size", type=int, default=BATCH_SIZE)
     parser.add_argument("--head-lr", type=float, default=HEAD_LR)
@@ -209,10 +164,15 @@ def main():
         default=None,
         help="Where to write .pth (default: project checkpoint/)",
     )
+    parser.add_argument(
+        "--freeze-backbone",
+        action="store_true",
+        help="only train the head (freeze the backbone).",
+    )
     args = parser.parse_args()
 
     from src.dataset import get_dataloaders
-    from src.model import build_model
+    from src.model import build_model, freeze_backbone
 
     train_loader, val_loader, _, num_classes, _ = get_dataloaders(
         data_dir=args.data_dir,
@@ -222,18 +182,19 @@ def main():
     model = build_model(
         args.arch, num_classes=num_classes, pretrained=PRETRAINED
     )
+    if args.freeze_backbone:
+        freeze_backbone(model)
+    n_epochs = args.epochs if args.epochs is not None else epochs_for_arch(args.arch)
     train(
         model,
         train_loader,
         val_loader,
         num_classes,
         arch=args.arch,
-        epochs=args.epochs,
+        epochs=n_epochs,
         head_lr=args.head_lr,
         backbone_lr=args.backbone_lr,
         checkpoint_dir=args.checkpoint_dir,
-        early_stop_patience=args.early_stop_patience,
-        early_stop_min_delta=args.early_stop_min_delta,
     )
 
 

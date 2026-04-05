@@ -22,7 +22,7 @@
     .back-btn { font-size: 13px; font-weight: 500; color: var(--ink2); text-decoration: none; transition: color 0.2s; }
     .back-btn:hover { color: var(--ink); }
 
-    .page { max-width: 900px; margin: 0 auto; padding: 64px 48px 96px; animation: fadeUp 0.6s ease both; }
+    .page { max-width: 960px; margin: 0 auto; padding: 64px 40px 96px; animation: fadeUp 0.6s ease both; }
 
     .page-tag { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); border-radius: 20px; padding: 4px 12px; margin-bottom: 20px; }
     h1 { font-family: 'DM Serif Display', serif; font-size: clamp(28px, 4vw, 44px); line-height: 1.15; letter-spacing: -0.03em; margin-bottom: 16px; }
@@ -33,19 +33,32 @@
     .meta-value { font-size: 13px; font-weight: 500; color: var(--ink); }
 
     /* Quick links */
-    .quick-links { display: flex; gap: 10px; flex-wrap: wrap; padding: 20px 24px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 56px; }
+    .quick-links { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; padding: 20px 24px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 56px; }
     .link-btn { font-size: 13px; font-weight: 500; padding: 7px 16px; border-radius: 8px; text-decoration: none; border: 1px solid var(--border); color: var(--ink2); background: var(--bg); transition: all 0.15s; }
     .link-btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
     .link-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
     .link-btn.primary:hover { background: var(--accent2); border-color: var(--accent2); }
+
+    .report-figure {
+      margin: 16px auto 4px;
+      max-width: min(640px, 100%);
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+    }
+    .report-figure img { width: 100%; max-width: 100%; height: auto; display: block; border-radius: 8px; }
+    .report-figure figcaption { font-size: 12px; color: var(--ink3); margin-top: 8px; line-height: 1.45; }
+    .figure-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 14px; justify-items: center; }
+    .figure-grid .report-figure { margin: 0; }
 
     /* Sections */
     .section { margin-bottom: 56px; }
     .section-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
     .section-num { font-family: 'DM Serif Display', serif; font-size: 13px; color: var(--accent); min-width: 24px; }
     h2 { font-family: 'DM Serif Display', serif; font-size: 22px; letter-spacing: -0.02em; color: var(--ink); }
+    h3 { font-family: 'DM Serif Display', serif; font-size: 17px; font-weight: 500; letter-spacing: -0.02em; color: var(--ink); margin: 22px 0 10px; }
     p { font-size: 15px; color: var(--ink2); line-height: 1.75; margin-bottom: 12px; }
-
     /* Overview */
     .overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
     .overview-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; display: flex; gap: 14px; align-items: flex-start; }
@@ -58,7 +71,6 @@
     .model-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
     .model-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; transition: box-shadow 0.2s, transform 0.2s; }
     .model-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); transform: translateY(-2px); }
-    .model-card-best { border-color: rgba(197,68,10,0.3); background: #fffcfb; }
     .model-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .model-name { font-size: 17px; font-weight: 500; color: var(--ink); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
     .model-desc { font-size: 13px; color: var(--ink2); line-height: 1.6; margin-bottom: 14px; }
@@ -66,10 +78,8 @@
     .model-stat { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); }
     .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink3); }
     .stat-value { font-size: 16px; font-weight: 500; color: var(--ink); }
-    .stat-value.best { color: var(--accent); }
     .badge-cnn { background: #EEEDFE; color: #3C3489; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
     .badge-vit { background: #E1F5EE; color: #085041; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
-    .best-tag { font-size: 10px; font-weight: 500; background: var(--accent); color: #fff; padding: 2px 7px; border-radius: 20px; }
 
     /* Results table */
     .results-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 16px; background: #fff; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
@@ -77,16 +87,6 @@
     .results-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--ink); }
     .results-table tr:last-child td { border-bottom: none; }
     .results-table tr:hover td { background: var(--bg); }
-    .best-cell { font-weight: 500; color: var(--accent); }
-
-    /* Video cards */
-    .video-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
-    .video-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-decoration: none; color: inherit; display: flex; align-items: center; gap: 16px; transition: box-shadow 0.2s, transform 0.2s; }
-    .video-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); transform: translateY(-2px); }
-    .video-play { width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-    .video-title { font-size: 14px; font-weight: 500; color: var(--ink); }
-    .video-sub { font-size: 12px; color: var(--ink3); margin-top: 2px; }
-
     footer { border-top: 1px solid var(--border); padding: 32px 48px; text-align: center; font-size: 13px; color: var(--ink3); }
     footer a { color: var(--ink2); text-decoration: none; }
     footer a:hover { color: var(--ink); }
@@ -105,7 +105,7 @@
     @media (max-width: 700px) {
       header, footer { padding: 0 24px; }
       .page { padding: 40px 24px 64px; }
-      .overview-grid, .model-grid, .video-grid { grid-template-columns: 1fr; }
+      .overview-grid, .model-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -135,7 +135,7 @@
       </div>
       <div class="meta-item">
         <span class="meta-label">Members</span>
-        <span class="meta-value">Nguyen Van A · Tran Thi B · Le Van C · Pham Thi D</span>
+        <span class="meta-value">Student 1 · Student 2 · Nguyen Manh Thi (2313205)</span>
       </div>
       <div class="meta-item">
         <span class="meta-label">Lecturer</span>
@@ -145,27 +145,71 @@
 
     <!-- Quick links -->
     <div class="quick-links">
-      <a class="link-btn primary" href="https://youtube.com/watch?v=DEMO_ID" target="_blank">▶ Demo Video</a>
-      <a class="link-btn" href="https://youtube.com/watch?v=REPORT_ID" target="_blank">▶ Report Video</a>
-      <a class="link-btn" href="https://github.com/YOUR_USERNAME/YOUR_REPO" target="_blank">↗ Source Code</a>
+      <a class="link-btn primary" href="https://github.com/YOUR_USERNAME/YOUR_REPO" target="_blank">↗ Source Code</a>
       <a class="link-btn" href="reports/assignment1_slides.pdf" target="_blank">↓ Slide Deck</a>
+      <a class="link-btn" href="https://www.cs.toronto.edu/~kriz/cifar.html" target="_blank" rel="noopener">CIFAR-100 (official)</a>
     </div>
 
-    <!-- 00: Overview -->
-    <div class="section">
+    <!-- 01: EDA -->
+    <div class="section" id="eda">
       <div class="section-header">
         <span class="section-num">01</span>
-        <h2>Overview</h2>
+        <h2>EDA &amp; data</h2>
       </div>
-      <p>This part of Assignment&nbsp;01 focuses on <strong>image classification</strong> on CIFAR-100.
-         We compare CNN and Vision Transformer families using pretrained backbones and report test accuracy.</p>
-      <div class="overview-grid">
+      <p>This part of Assignment&nbsp;01 is image classification on CIFAR-100. We compare CNN and Vision Transformer backbones, all fine-tuned from ImageNet-pretrained weights, and analyse errors at superclass and subclass level.</p>
+      <p>CIFAR-100 has 60,000 colour images in 100 fine-grained classes. Each image is 32×32 RGB. The split is balanced: 500 training and 100 test images per class, so no class-imbalance handling was required.</p>
+
+      <table class="results-table" aria-label="CIFAR-100 overview">
+        <thead>
+          <tr><th>Property</th><th>Value</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Number of classes</td><td>100</td></tr>
+          <tr><td>Training samples</td><td>50,000</td></tr>
+          <tr><td>Test samples</td><td>10,000</td></tr>
+          <tr><td>Image resolution</td><td>32 × 32 × 3 (RGB)</td></tr>
+          <tr><td>Samples per class (train)</td><td>500</td></tr>
+          <tr><td>Samples per class (test)</td><td>100</td></tr>
+        </tbody>
+      </table>
+
+      <p>The official 50k training split is partitioned 80/20 with a fixed random seed into 40,000 training and 10,000 validation images. The official 10,000 test images are reserved for final metrics and for the analysis in §05.</p>
+      <table class="results-table" aria-label="Train validation test split">
+        <thead>
+          <tr><th>Split</th><th>Samples</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Train (80% of CIFAR-100 train)</td><td>40,000</td><td>Model training</td></tr>
+          <tr><td>Validation (20% of CIFAR-100 train)</td><td>10,000</td><td>Monitor training / pick checkpoints</td></tr>
+          <tr><td>Test (official)</td><td>10,000</td><td>Held-out evaluation</td></tr>
+        </tbody>
+      </table>
+
+      <p>Sample images (ten classes) and brightness distribution of the training set.</p>
+      <figure class="report-figure">
+        <img src="img_cls_figures/sample_images_cls.png" alt="Sample CIFAR-100 images from ten classes" loading="lazy">
+      </figure>
+      <figure class="report-figure">
+        <img src="img_cls_figures/brightness_dist_img.png" alt="Brightness distribution of CIFAR-100 training set" loading="lazy">
+      </figure>
+      <p>Channel-wise means and standard deviations on the training set (used for normalization):</p>
+      <table class="results-table" aria-label="Pixel statistics">
+        <thead>
+          <tr><th>Statistic</th><th>R</th><th>G</th><th>B</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Mean</td><td>0.5071</td><td>0.4866</td><td>0.4409</td></tr>
+          <tr><td>Std</td><td>0.2673</td><td>0.2564</td><td>0.2762</td></tr>
+        </tbody>
+      </table>
+
+      <div class="overview-grid" style="margin-top:24px;">
         <div class="overview-card">
           <div class="overview-icon">🖼</div>
           <div>
             <div class="overview-title">Dataset</div>
             <div class="overview-sub">CIFAR-100 · 100 classes</div>
-            <div class="overview-models">32×32 RGB → resized for model input</div>
+            <div class="overview-models">Resized to 96×96 for pretrained backbones</div>
           </div>
         </div>
         <div class="overview-card">
@@ -173,30 +217,48 @@
           <div>
             <div class="overview-title">Families compared</div>
             <div class="overview-sub">Convolutional vs attention</div>
-            <div class="overview-models">ResNet, EfficientNet, Swin, ViT</div>
+            <div class="overview-models">ResNet-50, EfficientNet-B3, Swin-T, ViT-B/16</div>
           </div>
         </div>
         <div class="overview-card">
           <div class="overview-icon">📈</div>
           <div>
             <div class="overview-title">Goal</div>
-            <div class="overview-sub">Strong test accuracy</div>
-            <div class="overview-models">Fine-tune with AdamW + cosine LR</div>
+            <div class="overview-sub">Full fine-tune + layerwise LR</div>
+            <div class="overview-models">GPU · AdamW · cosine LR decay</div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Models -->
-    <div class="section">
+    <div class="section" id="models">
       <div class="section-header">
         <span class="section-num">02</span>
-        <h2>Models Used</h2>
+        <h2>Model architectures</h2>
       </div>
-      <p>We select four architectures representing two fundamentally different
-         approaches — CNNs rely on local feature extraction through convolution,
-         while Vision Transformers leverage global self-attention to capture
-         long-range dependencies across the entire image.</p>
+      <p>We use four pretrained models: two CNNs (ResNet-50, EfficientNet-B3) and two Vision Transformers (Swin-T, ViT-B/16). CNNs build representations through local convolution; ViTs use global self-attention (or windowed attention in Swin) to relate distant image regions.</p>
+
+      <table class="results-table" aria-label="Model summary">
+        <thead>
+          <tr><th>Model</th><th>Type</th><th>Params</th><th>Key mechanism</th><th>Pretrained on</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>ResNet-50</td><td><span class="badge-cnn">CNN</span></td><td>23.7M</td><td>Residual connections</td><td>ImageNet-1k</td></tr>
+          <tr><td>EfficientNet-B3</td><td><span class="badge-cnn">CNN</span></td><td>10.8M</td><td>Compound scaling + SE</td><td>ImageNet-1k</td></tr>
+          <tr><td>Swin-T</td><td><span class="badge-vit">ViT</span></td><td>27.6M</td><td>Shifted window attention</td><td>ImageNet-1k</td></tr>
+          <tr><td>ViT-B/16</td><td><span class="badge-vit">ViT</span></td><td>85.8M</td><td>Global self-attention</td><td>ImageNet-21k</td></tr>
+        </tbody>
+      </table>
+
+      <h3>CNN-based models</h3>
+      <p>ResNet-50 uses residual (skip) connections so gradients can flow through deep stacks; bottleneck blocks yield a 2048-D embedding before the classification head (~23.7M parameters).</p>
+      <p>EfficientNet-B3 scales depth, width, and resolution together (compound scaling), uses depthwise separable convolutions and Squeeze-and-Excitation blocks, and is lighter (~10.8M parameters) than ResNet-50 while remaining competitive.</p>
+
+      <h3>Vision Transformer–based models</h3>
+      <p>Swin-T is hierarchical: shifted-window attention keeps cost manageable versus full global attention on dense feature maps (~27.6M parameters).</p>
+      <p>ViT-B/16 splits the image into 16×16 patches, adds a learnable class token, and stacks 12 Transformer layers with 12 heads (~85.8M parameters). It is pretrained on the larger ImageNet-21k regime.</p>
+
       <div class="model-grid">
 
         <div class="model-card">
@@ -208,8 +270,12 @@
           <div class="model-desc">50-layer residual network with skip connections
             to address vanishing gradients. Pretrained on ImageNet-1k.</div>
           <div class="model-stat">
-            <span class="stat-label">Test accuracy</span>
-            <span class="stat-value">74.95%</span>
+            <span class="stat-label">Val · best acc</span>
+            <span class="stat-value">75.77%</span>
+          </div>
+          <div class="model-stat">
+            <span class="stat-label">Test acc</span>
+            <span class="stat-value">75.15%</span>
           </div>
         </div>
 
@@ -222,8 +288,12 @@
           <div class="model-desc">Compound scaling of depth, width, and resolution.
             Best accuracy-per-parameter in the CNN family. Pretrained on ImageNet-1k.</div>
           <div class="model-stat">
-            <span class="stat-label">Test accuracy</span>
-            <span class="stat-value">69.71%</span>
+            <span class="stat-label">Val · best acc</span>
+            <span class="stat-value">71.05%</span>
+          </div>
+          <div class="model-stat">
+            <span class="stat-label">Test acc</span>
+            <span class="stat-value">70.30%</span>
           </div>
         </div>
 
@@ -236,50 +306,108 @@
           <div class="model-desc">Hierarchical Vision Transformer with shifted window
             attention. Faster than ViT-B/16 with competitive accuracy. Pretrained on ImageNet-1k.</div>
           <div class="model-stat">
-            <span class="stat-label">Test accuracy</span>
-            <span class="stat-value">86.29%</span>
+            <span class="stat-label">Val · best acc</span>
+            <span class="stat-value">86.52%</span>
+          </div>
+          <div class="model-stat">
+            <span class="stat-label">Test acc</span>
+            <span class="stat-value">85.92%</span>
           </div>
         </div>
 
-        <div class="model-card model-card-best">
+        <div class="model-card">
           <div class="model-header">
             <span class="badge-vit">ViT</span>
             <span class="model-params">85.8M params</span>
           </div>
-          <div class="model-name">ViT-B/16 <span class="best-tag">Best</span></div>
+          <div class="model-name">ViT-B/16</div>
           <div class="model-desc">Treats images as 16×16 patch sequences with global
             self-attention. Pretrained on ImageNet-21k (14M images).</div>
           <div class="model-stat">
-            <span class="stat-label">Test accuracy</span>
-            <span class="stat-value best">88.84%</span>
+            <span class="stat-label">Val · best acc</span>
+            <span class="stat-value">89.19%</span>
+          </div>
+          <div class="model-stat">
+            <span class="stat-label">Test acc</span>
+            <span class="stat-value">89.10%</span>
           </div>
         </div>
 
       </div>
     </div>
 
-    <!-- 03: Results -->
-    <div class="section">
+    <!-- 03: Training -->
+    <div class="section" id="training">
       <div class="section-header">
         <span class="section-num">03</span>
+        <h2>Training configuration</h2>
+      </div>
+      <p>We fine-tune the full network from epoch 1, using a higher learning rate on the classification head than on the backbone, without an initial frozen-backbone phase. Inputs are upsampled from 32×32 to 96×96. Training employs random crop (padding 12) and horizontal flip; validation and test use resize only and the same normalisation as in §02.</p>
+
+      <table class="results-table" aria-label="Augmentation pipeline">
+        <thead>
+          <tr><th>Transform</th><th>Train</th><th>Val / test</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Resize</td><td>96 × 96</td><td>96 × 96</td></tr>
+          <tr><td>Random crop (extra padding 12 px)</td><td>Yes</td><td>No</td></tr>
+          <tr><td>Random horizontal flip</td><td>Yes</td><td>No</td></tr>
+          <tr><td>Per-channel normalisation (§02 stats)</td><td>Yes</td><td>Yes</td></tr>
+        </tbody>
+      </table>
+
+      <p>Optimization uses AdamW with weight decay 10<sup>−4</sup> and label smoothing 0.1. To limit catastrophic forgetting of pretrained features, the classification head uses a higher learning rate than the backbone; the learning rate follows a cosine schedule over the training epochs.</p>
+
+      <table class="results-table" aria-label="Hyperparameters">
+        <thead>
+          <tr><th>Hyperparameter</th><th>Value</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Optimizer</td><td>AdamW</td></tr>
+          <tr><td>Head learning rate</td><td>10<sup>−4</sup></td></tr>
+          <tr><td>Backbone learning rate</td><td>10<sup>−5</sup></td></tr>
+          <tr><td>Weight decay</td><td>10<sup>−4</sup></td></tr>
+          <tr><td>Label smoothing</td><td>0.1</td></tr>
+          <tr><td>Batch size</td><td>128</td></tr>
+          <tr><td>Train / val split</td><td>80% / 20% of CIFAR-100 train</td></tr>
+          <tr><td>LR schedule</td><td>Cosine decay to end of training</td></tr>
+          <tr><td>Loss</td><td>Cross-entropy</td></tr>
+        </tbody>
+      </table>
+
+      <table class="results-table" aria-label="Per-model training setup">
+        <thead>
+          <tr><th>Model</th><th>Type</th><th>Epochs</th><th>Mean s / epoch</th><th>Total wall time</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>ResNet-50</td><td><span class="badge-cnn">CNN</span></td><td>25</td><td>108</td><td>2703 s</td></tr>
+          <tr><td>EfficientNet-B3</td><td><span class="badge-cnn">CNN</span></td><td>25</td><td>99</td><td>2484 s</td></tr>
+          <tr><td>Swin-T</td><td><span class="badge-vit">ViT</span></td><td>20</td><td>122</td><td>2445 s</td></tr>
+          <tr><td>ViT-B/16</td><td><span class="badge-vit">ViT</span></td><td>20</td><td>294</td><td>5875 s</td></tr>
+        </tbody>
+      </table>
+      <p>GPU training (e.g. T4). Wall time is the full run in seconds; mean seconds per epoch is total divided by epochs, rounded. For each model we save the weights that achieved the best validation accuracy during training.</p>
+    </div>
+
+    <!-- 04: Results -->
+    <div class="section" id="results">
+      <div class="section-header">
+        <span class="section-num">04</span>
         <h2>Results</h2>
       </div>
-      <p>All models fine-tuned with AdamW, layerwise learning rates, and
-         CosineAnnealingLR on a single NVIDIA Tesla T4 GPU. ViT-B/16 achieves
-         the best accuracy (88.84%), outperforming the best CNN (ResNet-50, 74.95%)
-         by 13.9%.</p>
+      <p>All four models follow the protocol in §03 (full-network fine-tuning from the first epoch). Validation entries are the best accuracy and macro-averaged F1 observed on the 10,000-image hold-out (20% of the 50,000 training images) and determine checkpoint selection. Test entries report accuracy and macro F1 on the official 10,000-image CIFAR-100 test set using those checkpoints. Validation and test are well aligned; test accuracy is slightly below the best validation value for most models. ViT-B/16 attains the highest scores on both splits; the gap between ResNet-50 and ViT-B/16 on test is on the order of 14 percentage points.</p>
 
-      <table class="results-table">
+      <table class="results-table" aria-label="Validation and test results full fine-tune">
         <thead>
           <tr>
             <th>Model</th>
             <th>Type</th>
             <th>Params</th>
             <th>Epochs</th>
-            <th>Accuracy</th>
-            <th>F1 macro</th>
-            <th>Precision</th>
-            <th>Recall</th>
+            <th>Val acc</th>
+            <th>Val F1</th>
+            <th>Test acc</th>
+            <th>Test F1</th>
           </tr>
         </thead>
         <tbody>
@@ -287,68 +415,230 @@
             <td>ResNet-50</td>
             <td><span class="badge-cnn">CNN</span></td>
             <td>23.7M</td>
-            <td>15</td>
-            <td>0.7495</td>
-            <td>0.7473</td>
-            <td>0.7506</td>
-            <td>0.7495</td>
+            <td>25</td>
+            <td>0.7577</td>
+            <td>0.7546</td>
+            <td>0.7515</td>
+            <td>0.7492</td>
           </tr>
           <tr>
             <td>EfficientNet-B3</td>
             <td><span class="badge-cnn">CNN</span></td>
             <td>10.8M</td>
-            <td>15</td>
-            <td>0.6971</td>
-            <td>0.6948</td>
-            <td>0.6979</td>
-            <td>0.6971</td>
+            <td>25</td>
+            <td>0.7105</td>
+            <td>0.7076</td>
+            <td>0.7030</td>
+            <td>0.7020</td>
           </tr>
           <tr>
             <td>Swin-T</td>
             <td><span class="badge-vit">ViT</span></td>
             <td>27.6M</td>
-            <td>10</td>
-            <td>0.8629</td>
-            <td>0.8631</td>
-            <td>0.8645</td>
-            <td>0.8629</td>
+            <td>20</td>
+            <td>0.8652</td>
+            <td>0.8644</td>
+            <td>0.8592</td>
+            <td>0.8590</td>
           </tr>
           <tr>
-            <td><strong>ViT-B/16</strong></td>
+            <td>ViT-B/16</td>
             <td><span class="badge-vit">ViT</span></td>
             <td>85.8M</td>
-            <td>10</td>
-            <td class="best-cell">0.8884</td>
-            <td class="best-cell">0.8886</td>
-            <td class="best-cell">0.8900</td>
-            <td class="best-cell">0.8884</td>
+            <td>20</td>
+            <td>0.8919</td>
+            <td>0.8909</td>
+            <td>0.8910</td>
+            <td>0.8912</td>
           </tr>
         </tbody>
       </table>
+      <p>Section 05 reports confusion and per-subclass analyses using the same checkpoints on the test split.</p>
     </div>
 
-    <!-- Videos -->
-    <div class="section">
+    <!-- 05: Analysis -->
+    <div class="section" id="analysis">
       <div class="section-header">
-        <span class="section-num">—</span>
-        <h2>Videos</h2>
+        <span class="section-num">05</span>
+        <h2>Result analysis</h2>
       </div>
-      <div class="video-grid">
-        <a class="video-card" href="https://youtube.com/watch?v=DEMO_ID" target="_blank">
-          <div class="video-play">▶</div>
-          <div>
-            <div class="video-title">Demo Video</div>
-            <div class="video-sub">Live demonstration of the models</div>
-          </div>
-        </a>
-        <a class="video-card" href="https://youtube.com/watch?v=REPORT_ID" target="_blank">
-          <div class="video-play">▶</div>
-          <div>
-            <div class="video-title">Report Presentation</div>
-            <div class="video-sub">Full walkthrough of results & analysis</div>
-          </div>
-        </a>
+      <p>Predictions are grouped into CIFAR-100’s 20 superclasses (five fine classes each) and examined at three levels below. All figures use the official test set and the checkpoints from §04; the text matches the heatmaps and bar charts shown, with model ordering consistent with test accuracy in §04.</p>
+
+      <h3>Inter-superclass confusion</h3>
+      <p>For ViT-B/16, the matrix is dominated by the diagonal: most superclasses achieve correct superclass rates between 0.93 and 0.98, with aquatic mammals and small mammals nearer 0.90. Off-diagonal mass is modest; confusion between vehicles&nbsp;1 and vehicles&nbsp;2 is about 3–4%, with smaller exchanges (about 2–3%) between aquatic mammals and fish and among mammal groups.</p>
+      <p>Swin-T follows a similar pattern with somewhat wider spread. The lowest diagonal entries are aquatic mammals (about 0.86), reptiles (about 0.87), and medium and small mammals (about 0.88); many remaining superclasses remain at 0.95 or above. Vehicles&nbsp;1 and vehicles&nbsp;2 still overlap at roughly 3%.</p>
+      <p>ResNet-50 yields a weaker diagonal: small mammals, aquatic mammals, and medium mammals fall to about 0.75–0.77, whereas flowers and people remain near 0.93. Off-diagonal structure is more pronounced—for example aquatic mammals versus fish (about 7%), large outdoor natural versus trees (about 6%), and vehicles&nbsp;1 versus vehicles&nbsp;2 (about 5–6%)—in addition to broader mammal–mammal confusion.</p>
+      <p>EfficientNet-B3 exhibits the least compact superclass separation among the four models: reptiles and aquatic mammals reach only about 0.69–0.70, with several mammal superclasses between 0.72 and 0.77. Confusion exceeds that of ViT-B/16 and Swin-T; for instance, medium versus small mammals and aquatic mammals versus fish approach 8%, and the two vehicle superclasses mutually confuse at roughly 8–9%.</p>
+      <div class="figure-grid">
+        <figure class="report-figure">
+          <img src="img_cls_figures/img_cls/1_inter_superclass_resnet50.png" alt="Inter-superclass confusion matrix, ResNet-50" loading="lazy">
+          <figcaption>ResNet-50</figcaption>
+        </figure>
+        <figure class="report-figure">
+          <img src="img_cls_figures/img_cls/1_inter_superclass_efficientnet_b3.png" alt="Inter-superclass confusion matrix, EfficientNet-B3" loading="lazy">
+          <figcaption>EfficientNet-B3</figcaption>
+        </figure>
+        <figure class="report-figure">
+          <img src="img_cls_figures/img_cls/1_inter_superclass_swin_tiny_patch4_window7_224.png" alt="Inter-superclass confusion matrix, Swin-T" loading="lazy">
+          <figcaption>Swin-T</figcaption>
+        </figure>
+        <figure class="report-figure">
+          <img src="img_cls_figures/img_cls/1_inter_superclass_vit_base_patch16_224.png" alt="Inter-superclass confusion matrix, ViT-B/16" loading="lazy">
+          <figcaption>ViT-B/16</figcaption>
+        </figure>
       </div>
+
+      <h3>Intra-superclass (fine-grained) errors</h3>
+      <p>Each bar is the fraction of test samples for which the superclass prediction is correct while the fine-grained label is wrong. The people superclass contributes the largest share for every backbone (EfficientNet-B3 about 0.44, ResNet-50 about 0.39, Swin-T about 0.32, ViT-B/16 about 0.24). Trees rank second throughout (about 0.19 on ViT-B/16 up to about 0.33 on ResNet-50).</p>
+      <p>ViT-B/16 keeps intra-superclass error for most other groups below about 0.09; aquatic mammals lies near that level. The lowest values correspond to household electrical and vehicles&nbsp;2 (near 0.01). Swin-T is similar, with medium mammals especially low (near 0.01) and most non-people superclasses below the 8% band in the colour scale.</p>
+      <p>ResNet-50 and EfficientNet-B3 show further elevated bars—including aquatic mammals, flowers, household furniture, and small mammals on EfficientNet (several values between 0.15 and 0.25)—so fine-grained errors are not confined to people and trees. The legend encodes red as above 15%, orange as 8–15%, and green as below 8%.</p>
+      <div class="figure-grid">
+        <figure class="report-figure">
+          <img src="img_cls_figures/img_cls/2_intra_superclass_resnet50.png" alt="Intra-superclass confusion, ResNet-50" loading="lazy">
+          <figcaption>ResNet-50</figcaption>
+        </figure>
+        <figure class="report-figure">
+          <img src="img_cls_figures/img_cls/2_intra_superclass_efficientnet_b3.png" alt="Intra-superclass confusion, EfficientNet-B3" loading="lazy">
+          <figcaption>EfficientNet-B3</figcaption>
+        </figure>
+        <figure class="report-figure">
+          <img src="img_cls_figures/img_cls/2_intra_superclass_swin_tiny_patch4_window7_224.png" alt="Intra-superclass confusion, Swin-T" loading="lazy">
+          <figcaption>Swin-T</figcaption>
+        </figure>
+        <figure class="report-figure">
+          <img src="img_cls_figures/img_cls/2_intra_superclass_vit_base_patch16_224.png" alt="Intra-superclass confusion, ViT-B/16" loading="lazy">
+          <figcaption>ViT-B/16</figcaption>
+        </figure>
+      </div>
+
+      <h3>Per-subclass accuracy</h3>
+      <p>The ViT-B/16 subclass panel includes a dashed mean line near 0.89 test accuracy per fine class. The people group (baby, boy, girl, man, woman) lies mostly below that mean; boy and girl are the lowest bars, which aligns with the high intra-people error noted above. Tree classes also fall below the mean, consistent with difficult foliage discrimination at 96×96 resolution.</p>
+      <p>The highest per-class bars on the ViT-B/16 plot include large outdoor man-made objects (for example skyscraper), several vehicles&nbsp;2 classes (lawn mower, tank), and distinctive animals such as shark; many insect and carnivore subclasses lie near or above the mean. The ResNet-50 and EfficientNet-B3 panels show the same qualitative pattern, with people and trees furthest below the mean, though absolute levels on those difficult classes are lower than for ViT-B/16.</p>
+      <div class="figure-grid">
+        <figure class="report-figure">
+          <img src="img_cls_figures/img_cls/3_subclass_accuracy_resnet50.png" alt="Per-subclass accuracy, ResNet-50" loading="lazy">
+          <figcaption>ResNet-50</figcaption>
+        </figure>
+        <figure class="report-figure">
+          <img src="img_cls_figures/img_cls/3_subclass_accuracy_efficientnet_b3.png" alt="Per-subclass accuracy, EfficientNet-B3" loading="lazy">
+          <figcaption>EfficientNet-B3</figcaption>
+        </figure>
+        <figure class="report-figure">
+          <img src="img_cls_figures/img_cls/3_subclass_accuracy_swin_tiny_patch4_window7_224.png" alt="Per-subclass accuracy, Swin-T" loading="lazy">
+          <figcaption>Swin-T</figcaption>
+        </figure>
+        <figure class="report-figure">
+          <img src="img_cls_figures/img_cls/3_subclass_accuracy_vit_base_patch16_224.png" alt="Per-subclass accuracy, ViT-B/16" loading="lazy">
+          <figcaption>ViT-B/16</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- 06: Extension — fine-tune strategy comparison -->
+    <div class="section" id="extensions">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2>Extension: fine-tune strategy comparison</h2>
+      </div>
+      <p>Strategy A denotes full fine-tuning from epoch 1 (§03–§04). Strategy B freezes the backbone for an initial segment of training, then unfreezes and continues with the same layerwise learning rates. Strategy B test figures use the best phased checkpoints, evaluated on the official test set with the same procedure as in §04.</p>
+
+      <h3>Strategy A — full fine-tune (all layers from epoch 1)</h3>
+      <table class="results-table" aria-label="Full fine-tune validation test and time">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Val acc</th>
+            <th>Val F1</th>
+            <th>Test acc</th>
+            <th>Test F1</th>
+            <th>Total (s)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ResNet-50</td>
+            <td>0.7577</td>
+            <td>0.7546</td>
+            <td>0.7515</td>
+            <td>0.7492</td>
+            <td>2703</td>
+          </tr>
+          <tr>
+            <td>EfficientNet-B3</td>
+            <td>0.7105</td>
+            <td>0.7076</td>
+            <td>0.7030</td>
+            <td>0.7020</td>
+            <td>2484</td>
+          </tr>
+          <tr>
+            <td>Swin-T</td>
+            <td>0.8652</td>
+            <td>0.8644</td>
+            <td>0.8592</td>
+            <td>0.8590</td>
+            <td>2445</td>
+          </tr>
+          <tr>
+            <td>ViT-B/16</td>
+            <td>0.8919</td>
+            <td>0.8909</td>
+            <td>0.8910</td>
+            <td>0.8912</td>
+            <td>5875</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Strategy B — phased (head-only, then unfreeze)</h3>
+      <p>Phase 1: backbone frozen, train the head only. Phase 2: unfreeze and train the full network with the same layerwise learning rates as Strategy A. Epoch budget: CNNs 5 + 20; ViT family 3 + 17.</p>
+      <table class="results-table" aria-label="Phased fine-tune validation test and time">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Val acc</th>
+            <th>Val F1</th>
+            <th>Test acc</th>
+            <th>Test F1</th>
+            <th>Total (s)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ResNet-50</td>
+            <td>0.7345</td>
+            <td>0.7309</td>
+            <td>0.7303</td>
+            <td>0.7283</td>
+            <td>2498</td>
+          </tr>
+          <tr>
+            <td>EfficientNet-B3</td>
+            <td>0.6930</td>
+            <td>0.6900</td>
+            <td>0.6906</td>
+            <td>0.6891</td>
+            <td>2188</td>
+          </tr>
+          <tr>
+            <td>Swin-T</td>
+            <td>0.8650</td>
+            <td>0.8640</td>
+            <td>0.8620</td>
+            <td>0.8618</td>
+            <td>2524</td>
+          </tr>
+          <tr>
+            <td>ViT-B/16</td>
+            <td>0.8888</td>
+            <td>0.8882</td>
+            <td>0.8882</td>
+            <td>0.8884</td>
+            <td>6027</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>On validation, Strategy A is at least as accurate as Strategy B for all four backbones (the margin is largest for the CNNs; Swin-T is nearly tied). On test, Strategy A remains ahead for ResNet-50, EfficientNet-B3, and ViT-B/16, while Swin-T is slightly higher under Strategy B. Wall times for Strategy B are not uniformly lower than for Strategy A.</p>
     </div>
 
   </div>

@@ -53,7 +53,7 @@ ImageClassification/data/
 # —— ML: checkpoint nặng (bỏ comment nếu muốn đẩy .pth lên Git / dùng Git LFS) ——
 ImageClassification/checkpoint/*.pth
 ImageClassification/outputs/
-
+TextClassification/models/*.pth
 # —— Logs & experiment tools ——
 *.log
 wandb/

@@ -65,7 +65,7 @@ def plot_history(histories: dict, save_path=None):
     print(f"Saved -> {save_path}")
 
 
-def plot_confusion_matrix(cm, class_names, arch, save_path=None):
+def plot_confusion_matrix(cm, class_names, arch, save_path=None, show: bool = True):
     """Plot a readable confusion matrix (shows top-20 classes for readability)."""
     per_class_errors = cm.sum(axis=1) - np.diag(cm)
     top20_idx = np.argsort(per_class_errors)[-20:][::-1]
@@ -91,7 +91,10 @@ def plot_confusion_matrix(cm, class_names, arch, save_path=None):
     path = Path(save_path or (OUTPUTS_DIR / f"cm_{arch}.png"))
     path.parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(path, dpi=150, bbox_inches="tight")
-    plt.show()
+    if show:
+        plt.show()
+    else:
+        plt.close()
     print(f"Saved -> {path}")
 
 
