@@ -61,3 +61,6 @@ lightning_logs/
 
 # —— Jupyter ——
 .ipynb_checkpoints/
+
+run_all.sh
+setup_once.sh
