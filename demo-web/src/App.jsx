@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { TAB_STORAGE_KEY } from "./constants.js";
 import { ImageTab } from "./ImageTab.jsx";
 import { TextTab } from "./TextTab.jsx";
+import { MultimodalTab } from "./MultimodalTab.jsx";
 
 function readStoredTab() {
   try {
     const t = localStorage.getItem(TAB_STORAGE_KEY);
-    return t === "text" ? "text" : "image";
+    return t === "text" ? "text" : t === "multimodal" ? "multimodal" : "image";
   } catch {
     return "image";
   }
@@ -60,9 +61,20 @@ export default function App() {
           >
             Văn bản · News
           </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === "multimodal"}
+            className={tab === "multimodal" ? "demo-tab demo-tab--active" : "demo-tab"}
+            onClick={() => setTab("multimodal")}
+          >
+            Multimodal · Food-101
+          </button>
         </div>
 
-        {tab === "image" ? <ImageTab /> : <TextTab />}
+        {tab === "image" && <ImageTab />}
+        {tab === "text" && <TextTab />}
+        {tab === "multimodal" && <MultimodalTab />}
       </main>
 
       <footer className="demo-footer">

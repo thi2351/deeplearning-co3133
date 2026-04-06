@@ -8,6 +8,7 @@ Course work: **image** classification (CIFAR-100) and **text** classification (n
 |------|------|
 | `ImageClassification/` | Training, checkpoints, CIFAR-100 data dir |
 | `TextClassification/` | Notebook, Python package `tc/`, `models/*.pth`, demo samples |
+| `MultimodalClassification/` | Multimodal (image + text) module scaffold, `src/`, and `weights/` |
 | `demo-api/` | Unified Flask server (`app.py`) |
 | `demo-web/` | Vite + React UI (tabs: image + text) |
 | `assignments/` | Assignment HTML |
@@ -36,6 +37,7 @@ Open the URL Vite prints (usually `http://127.0.0.1:5173`). The dev server proxi
 
 - Image checkpoints: `ImageClassification/checkpoint/*.pth` (see `ImageClassification/src/config.py`).
 - Text checkpoints: `TextClassification/models/*.pth`.
+- Multimodal checkpoints: `MultimodalClassification/weights/*.pth`.
 - Optional: `PORT`, `MODEL_CHECKPOINT`, `TEXT_MODELS_DIR`, `VITE_PROXY_API` (see `demo-web/vite.config.js`).
 
 ## License / course

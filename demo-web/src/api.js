@@ -26,6 +26,13 @@ export function apiText(path) {
   return `${apiBase}/api/text${norm}`;
 }
 
+/** Multimodal routes live under `/api/mm/*`. */
+export function apiMultimodal(path) {
+  const tail = path.replace(/^\/api/, "") || "/";
+  const norm = tail.startsWith("/") ? tail : `/${tail}`;
+  return `${apiBase}/api/mm${norm}`;
+}
+
 export function modelDisplayName(m) {
   if (m?.arch) return m.arch;
   return String(m?.id ?? "")

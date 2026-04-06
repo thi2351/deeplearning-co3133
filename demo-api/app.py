@@ -15,26 +15,33 @@ trees can stay on ``sys.path`` without import hacks.
 from __future__ import annotations
 
 import io
+import json
 import os
 import random
 import sys
+import time
 import warnings
 from pathlib import Path
+from urllib.parse import quote
 
 from flask import Blueprint, Flask, jsonify, make_response, request, send_file
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 IC_ROOT = REPO_ROOT / "ImageClassification"
 TC_ROOT = REPO_ROOT / "TextClassification"
+MM_ROOT = REPO_ROOT / "MultimodalClassification"
 
 if not IC_ROOT.is_dir():
     raise RuntimeError(f"Expected ImageClassification at {IC_ROOT}")
 
+# Keep existing imports working (`src` from ImageClassification, `tc` from TextClassification)
+# and add repo root for namespaced imports (`MultimodalClassification.*`).
 sys.path.insert(0, str(IC_ROOT))
 if TC_ROOT.is_dir():
     sys.path.insert(0, str(TC_ROOT))
+sys.path.insert(0, str(REPO_ROOT))
 
-from PIL import UnidentifiedImageError
+from PIL import Image, UnidentifiedImageError
 from torchvision.datasets import CIFAR100
 
 from src.config import CHECKPOINT_DIR, CIFAR100_CLASS_NAMES, DATA_DIR
@@ -136,6 +143,10 @@ def health():
         out["text_prefix"] = "/api/text"
     else:
         out["text"] = False
+
+    out["multimodal"] = MM_ROOT.is_dir()
+    if out["multimodal"]:
+        out["multimodal_prefix"] = "/api/mm"
     return jsonify(out)
 
 
@@ -281,6 +292,305 @@ def predict():
             "topk": result["topk"],
         }
     )
+
+
+# --- Multimodal (CLIP + head under MultimodalClassification/) ---
+def _register_multimodal_routes() -> None:
+    if not MM_ROOT.is_dir():
+        return
+
+    try:
+        from MultimodalClassification.src.config import (
+            DATA_DIR as MM_DATA_DIR,
+            DEFAULT_CHECKPOINT,
+            DEFAULT_CLASSES_JSON,
+            DEMO_SAMPLES_PATH as MM_DEMO_SAMPLES_PATH,
+        )
+        from MultimodalClassification.src.inference import (
+            load_classes_from_path,
+            load_demo_samples as load_mm_demo_samples,
+        )
+        from MultimodalClassification.src.reporting import (
+            predict_few_shot,
+            predict_zero_shot,
+        )
+        from MultimodalClassification.src.service import MultimodalFoodClassifierService
+    except Exception as e:
+        warnings.warn(f"Multimodal routes not registered: {e}", stacklevel=1)
+        return
+
+    mm_bp = Blueprint("multimodal_demo", __name__, url_prefix="/api/mm")
+    mm_cache: dict = {}
+
+    def _mm_checkpoint_path() -> Path:
+        override = os.environ.get("MM_CHECKPOINT")
+        return Path(override).resolve() if override else Path(DEFAULT_CHECKPOINT).resolve()
+
+    def _mm_hf_model() -> str:
+        return os.environ.get("MM_HF_MODEL", "openai/clip-vit-base-patch32")
+
+    def _mm_classes() -> list[str]:
+        inline = os.environ.get("MM_CLASSES_JSON", "").strip()
+        if inline:
+            try:
+                parsed = json.loads(inline)
+            except Exception as e:
+                raise ValueError(f"MM_CLASSES_JSON is invalid JSON: {e}") from e
+            if not isinstance(parsed, list) or not all(isinstance(x, str) for x in parsed):
+                raise ValueError("MM_CLASSES_JSON must be a JSON list of strings")
+            classes = [x.strip() for x in parsed if x.strip()]
+            if not classes:
+                raise ValueError("MM_CLASSES_JSON is empty")
+            return classes
+
+        classes_path = Path(os.environ.get("MM_CLASSES_PATH", str(DEFAULT_CLASSES_JSON))).resolve()
+        return load_classes_from_path(classes_path)
+
+    def _get_mm_service() -> MultimodalFoodClassifierService:
+        ckpt = _mm_checkpoint_path()
+        classes = _mm_classes()
+        hf_model = _mm_hf_model()
+        key = (str(ckpt), tuple(classes), hf_model)
+        if key not in mm_cache:
+            if not ckpt.is_file():
+                raise FileNotFoundError(
+                    f"Multimodal checkpoint not found: {ckpt}. Set MM_CHECKPOINT env var."
+                )
+            mm_cache[key] = MultimodalFoodClassifierService(
+                classes=classes,
+                checkpoint_path=str(ckpt),
+                hf_model_name=hf_model,
+            )
+        return mm_cache[key]
+
+    def _mm_dataset_root() -> Path:
+        env_root = os.environ.get("MM_DATASET_ROOT", "").strip()
+        if env_root:
+            return Path(env_root).expanduser().resolve()
+
+        # Default to common kagglehub cache location.
+        return (
+            Path.home()
+            / ".cache"
+            / "kagglehub"
+            / "datasets"
+            / "gianmarco96"
+            / "upmcfood101"
+            / "versions"
+            / "1"
+            / "images"
+            / "test"
+        ).resolve()
+
+    @mm_bp.get("/health")
+    def mm_health():
+        try:
+            classes = _mm_classes()
+            checkpoint = _mm_checkpoint_path()
+            return jsonify(
+                status="ok",
+                demo="multimodal",
+                classes_count=len(classes),
+                checkpoint_exists=checkpoint.is_file(),
+                checkpoint=str(checkpoint),
+            )
+        except Exception as e:
+            return jsonify(status="error", demo="multimodal", error=str(e)), 503
+
+    @mm_bp.post("/predict")
+    def mm_predict():
+        if "image" not in request.files:
+            return jsonify(error="Missing form field 'image'"), 400
+
+        file = request.files["image"]
+        if file.filename in (None, ""):
+            return jsonify(error="Empty filename"), 400
+
+        text = request.form.get("text", request.args.get("text", ""))
+
+        try:
+            topk = max(1, min(20, int(request.args.get("topk", request.form.get("topk", 5)))))
+        except ValueError:
+            return jsonify(error="Invalid topk"), 400
+
+        raw = file.read()
+        if not raw:
+            return jsonify(error="Empty file body"), 400
+
+        try:
+            image = Image.open(io.BytesIO(raw)).convert("RGB")
+        except UnidentifiedImageError:
+            return jsonify(error="Not a valid image (try PNG, JPEG, WebP, GIF)."), 400
+
+        try:
+            svc = _get_mm_service()
+        except FileNotFoundError as e:
+            return jsonify(error=str(e)), 503
+        except Exception as e:
+            return jsonify(error=f"Multimodal service init failed: {e}"), 503
+
+        try:
+            preds = svc.predict(image=image, text=text, top_k=topk)
+        except Exception as e:
+            return jsonify(error=f"Prediction failed: {e}"), 500
+
+        return jsonify(
+            {
+                "predictions": [
+                    {"class_name": row.class_name, "score": row.score}
+                    for row in preds
+                ]
+            }
+        )
+
+    @mm_bp.post("/report")
+    def mm_report():
+        if "image" not in request.files:
+            return jsonify(error="Missing form field 'image'"), 400
+
+        file = request.files["image"]
+        if file.filename in (None, ""):
+            return jsonify(error="Empty filename"), 400
+
+        text = request.form.get("text", request.args.get("text", ""))
+
+        try:
+            topk = max(1, min(20, int(request.args.get("topk", request.form.get("topk", 5)))))
+        except ValueError:
+            return jsonify(error="Invalid topk"), 400
+
+        try:
+            shots = max(1, min(8, int(request.args.get("shots", request.form.get("shots", 1)))))
+        except ValueError:
+            return jsonify(error="Invalid shots"), 400
+
+        raw = file.read()
+        if not raw:
+            return jsonify(error="Empty file body"), 400
+
+        try:
+            image = Image.open(io.BytesIO(raw)).convert("RGB")
+        except UnidentifiedImageError:
+            return jsonify(error="Not a valid image (try PNG, JPEG, WebP, GIF)."), 400
+
+        try:
+            svc = _get_mm_service()
+            classes = _mm_classes()
+            dataset_root = _mm_dataset_root()
+            if not dataset_root.is_dir():
+                return jsonify(
+                    error=(
+                        f"Few-shot dataset root not found: {dataset_root}. "
+                        "Set MM_DATASET_ROOT to the Food-101 class folder."
+                    )
+                ), 503
+        except Exception as e:
+            return jsonify(error=f"Multimodal service init failed: {e}"), 503
+
+        try:
+            t0 = time.perf_counter()
+            zero = predict_zero_shot(
+                clip=svc.clip,
+                classes=classes,
+                image=image,
+                text=text,
+                top_k=topk,
+            )
+            t_zero = (time.perf_counter() - t0) * 1000.0
+
+            t1 = time.perf_counter()
+            few = predict_few_shot(
+                clip=svc.clip,
+                classes=classes,
+                image=image,
+                text=text,
+                dataset_root=dataset_root,
+                shots=shots,
+                top_k=topk,
+            )
+            t_few = (time.perf_counter() - t1) * 1000.0
+
+            t2 = time.perf_counter()
+            full = svc.predict(image=image, text=text, top_k=topk)
+            t_full = (time.perf_counter() - t2) * 1000.0
+        except Exception as e:
+            return jsonify(error=f"Report run failed: {e}"), 500
+
+        def _rows(rows):
+            return [{"class_name": r.class_name, "score": float(r.score)} for r in rows]
+
+        zero_rows = _rows(zero.rows)
+        few_rows = _rows(few.rows)
+        full_rows = _rows(full)
+
+        return jsonify(
+            {
+                "shots": shots,
+                "dataset_root": str(dataset_root),
+                "methods": {
+                    "zero_shot": {
+                        "top1": zero_rows[0] if zero_rows else None,
+                        "topk": zero_rows,
+                        "latency_ms": t_zero,
+                    },
+                    "few_shot": {
+                        "top1": few_rows[0] if few_rows else None,
+                        "topk": few_rows,
+                        "latency_ms": t_few,
+                    },
+                    "full_model": {
+                        "top1": full_rows[0] if full_rows else None,
+                        "topk": full_rows,
+                        "latency_ms": t_full,
+                    },
+                },
+            }
+        )
+
+    @mm_bp.get("/dataset-samples")
+    def mm_dataset_samples():
+        try:
+            count = min(24, max(1, int(request.args.get("count", 9))))
+        except ValueError:
+            return jsonify(error="bad count"), 400
+
+        try:
+            rows = load_mm_demo_samples(MM_DEMO_SAMPLES_PATH)
+        except Exception as e:
+            return jsonify(error=f"Cannot read multimodal samples: {e}"), 500
+
+        if not rows:
+            return jsonify(samples=[], warning="No multimodal demo samples found.")
+
+        items = []
+        for row in rows[:count]:
+            item = dict(row)
+            image_rel = str(item.get("image_rel", "")).strip()
+            if image_rel:
+                item["image_url"] = f"/api/mm/sample-image?path={quote(image_rel)}"
+            items.append(item)
+
+        return jsonify(samples=items, total=len(rows))
+
+    @mm_bp.get("/sample-image")
+    def mm_sample_image():
+        rel = request.args.get("path", "").strip()
+        if not rel:
+            return jsonify(error="missing path"), 400
+
+        base = Path(MM_DATA_DIR).resolve()
+        cand = (base / rel).resolve()
+        if not cand.is_relative_to(base):
+            return jsonify(error="invalid path"), 400
+        if not cand.is_file():
+            return jsonify(error=f"sample image not found: {rel}"), 404
+
+        return send_file(cand)
+
+    app.register_blueprint(mm_bp)
+
+
+_register_multimodal_routes()
 
 
 # --- Text (transformer checkpoints under TextClassification/) ---
