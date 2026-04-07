@@ -83,10 +83,36 @@
     .assignment-parts a:hover { color: var(--accent); }
     .assignment-parts .current { color: var(--accent); font-weight: 600; }
 
+    /* EDA */
+    .eda-grid { display: flex; flex-direction: column; gap: 56px; margin-top: 32px; }
+    .eda-item { display: flex; flex-direction: column; gap: 16px; }
+    .eda-header { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+    .eda-img { width: 100%; border: 1px solid var(--border); border-radius: var(--radius); background: #fff; object-fit: contain; box-shadow: 0 6px 24px rgba(0,0,0,0.04); }
+    .eda-caption { font-size: 14px; color: var(--ink2); text-align: center; }
+
+    /* Confusion Matrix */
+    .cm-controls { margin-bottom: 20px; display: flex; justify-content: flex-end; }
+    .toggle-control { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+    .toggle-control input { display: none; }
+    .control-indicator { width: 36px; height: 20px; background: var(--bg2); border-radius: 20px; position: relative; transition: background 0.3s; border: 1px solid var(--border); }
+    .control-indicator::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; background: #fff; border-radius: 50%; transition: transform 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .toggle-control input:checked + .control-indicator { background: var(--accent); border-color: var(--accent); }
+    .toggle-control input:checked + .control-indicator::after { transform: translateX(16px); }
+    .control-label { font-size: 14px; font-weight: 500; color: var(--ink); }
+
+    .cm-viewer { display: grid; grid-template-columns: 1fr; gap: 24px; transition: all 0.3s ease; max-width: 700px; margin: 0 auto; }
+    .cm-viewer.compare { grid-template-columns: 1fr 1fr; max-width: 100%; }
+    .cm-block { display: flex; flex-direction: column; gap: 12px; }
+    .cm-block.hidden { display: none; }
+    .cm-select { padding: 8px 12px; font-family: inherit; font-size: 14px; border: 1px solid var(--border); border-radius: 8px; background: #fff; color: var(--ink); width: 100%; outline: none; cursor: pointer; transition: border-color 0.2s; }
+    .cm-select:focus { border-color: var(--accent); }
+    .cm-img { width: 100%; height: auto; max-height: 550px; border: 1px solid var(--border); border-radius: var(--radius); background: #fff; object-fit: contain; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+
     @media (max-width: 700px) {
       header, footer { padding: 0 24px; }
       .page { padding: 40px 24px 64px; }
       .overview-grid, .model-grid { grid-template-columns: 1fr; }
+      .cm-viewer.compare { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -162,61 +188,25 @@
     <div class="section">
       <div class="section-header">
         <span class="section-num">02</span>
-        <h2>Architectures Compared</h2>
+        <h2>Exploratory Data Analysis</h2>
       </div>
-      <p>We implemented four models representing evolutionary steps in NLP: simple sequence processing (LSTM), local feature extraction (CNN), hybrid modeling (RCNN), and global self-attention (DistilBERT).</p>
+      <p>Before modeling, we analyzed the dataset to understand the class distribution, most frequent words per class, and the distribution of text lengths. These insights inform our preprocessing strategy and architectural choices.</p>
       
-      <div class="model-grid">
-        <div class="model-card">
-          <div class="model-header">
-            <span class="badge-rnn">RNN</span>
-            <span class="model-params">Bi-LSTM</span>
-          </div>
-          <div class="model-name">LSTMModel</div>
-          <div class="model-desc">Bidirectional Long Short-Term Memory network capturing temporal dependencies across the text sequence.</div>
-          <div class="model-stat">
-            <span class="stat-label">Accuracy</span>
-            <span class="stat-value">84.07%</span>
-          </div>
+      <div class="eda-grid">
+        <div class="eda-item">
+          <h3 class="eda-header">Class Distribution</h3>
+          <img class="eda-img" src="text_fig/class_distribution.png" alt="Class Distribution" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 800 400\'%3E%3Crect width=\'800\' height=\'400\' fill=\'%23f9f7f4\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'16px\' fill=\'%23a8a49f\'%3EImage Placeholder%3C/text%3E%3C/svg%3E'" />
+          <div class="eda-caption">Distribution of news items across the 7 core categories.</div>
         </div>
-
-        <div class="model-card">
-          <div class="model-header">
-            <span class="badge-rnn">CNN</span>
-            <span class="model-params">Multi-kernel</span>
-          </div>
-          <div class="model-name">CNNModel</div>
-          <div class="model-desc">Utilizes multiple filter sizes to extract local n-gram features from word embeddings.</div>
-          <div class="model-stat">
-            <span class="stat-label">Accuracy</span>
-            <span class="stat-value">81.56%</span>
-          </div>
+        <div class="eda-item">
+          <h3 class="eda-header">Word Frequency</h3>
+          <img class="eda-img" src="text_fig/word_frequency.png" alt="Word Frequency" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 800 400\'%3E%3Crect width=\'800\' height=\'400\' fill=\'%23f9f7f4\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'16px\' fill=\'%23a8a49f\'%3EImage Placeholder%3C/text%3E%3C/svg%3E'" />
+          <div class="eda-caption">Top occurring words per category after removing common stopwords.</div>
         </div>
-
-        <div class="model-card">
-          <div class="model-header">
-            <span class="badge-rnn">Hybrid</span>
-            <span class="model-params">Recurrent CNN</span>
-          </div>
-          <div class="model-name">RCNNModel</div>
-          <div class="model-desc">Combines RNN's context-aware embeddings with CNN's max-pooling for enhanced feature selection.</div>
-          <div class="model-stat">
-            <span class="stat-label">Accuracy</span>
-            <span class="stat-value">85.40%</span>
-          </div>
-        </div>
-
-        <div class="model-card model-card-best">
-          <div class="model-header">
-            <span class="badge-trans">TRANSFORMER</span>
-            <span class="model-params">Pre-trained</span>
-          </div>
-          <div class="model-name">DistilBERT <span class="best-tag">Best</span></div>
-          <div class="model-desc">Leverages pre-trained knowledge from BERT via knowledge distillation. Uncased variant.</div>
-          <div class="model-stat">
-            <span class="stat-label">Accuracy</span>
-            <span class="stat-value best">88.64%</span>
-          </div>
+        <div class="eda-item">
+          <h3 class="eda-header">Text Length Distribution</h3>
+          <img class="eda-img" src="text_fig/text_length_distribution.png" alt="Text Length Distribution" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 800 400\'%3E%3Crect width=\'800\' height=\'400\' fill=\'%23f9f7f4\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'16px\' fill=\'%23a8a49f\'%3EImage Placeholder%3C/text%3E%3C/svg%3E'" />
+          <div class="eda-caption">Distribution of the combined headline and description lengths in words.</div>
         </div>
       </div>
     </div>
@@ -224,52 +214,204 @@
     <div class="section">
       <div class="section-header">
         <span class="section-num">03</span>
+        <h2>Architectures Compared</h2>
+      </div>
+      <p>We explored a variety of architectures ranging from baseline sequence and local feature models (LSTM, CNN, RCNN) to modern pre-trained Transformers (DistilBERT, RoBERTa, ALBERT). Furthermore, we built ensemble pipelines combining predictions across models to capture complementary patterns.</p>
+      
+      <div class="model-grid">
+        <div class="model-card">
+          <div class="model-header">
+            <span class="badge-rnn">TRADITIONAL</span>
+            <span class="model-params">Bi-LSTM</span>
+          </div>
+          <div class="model-name">LSTM Baseline</div>
+          <div class="model-desc">Bidirectional Long Short-Term Memory network capturing temporal dependencies across the text sequence.</div>
+          <div class="model-stat">
+            <span class="stat-label">Macro F1</span>
+            <span class="stat-value">0.7918</span>
+          </div>
+        </div>
+
+        <div class="model-card">
+          <div class="model-header">
+            <span class="badge-trans">TRANSFORMER</span>
+            <span class="model-params">RoBERTa</span>
+          </div>
+          <div class="model-name">RoBERTa (Base)</div>
+          <div class="model-desc">Modern pre-trained robustly optimized BERT approach fine-tuned for sequence classification.</div>
+          <div class="model-stat">
+            <span class="stat-label">Macro F1</span>
+            <span class="stat-value">0.8507</span>
+          </div>
+        </div>
+
+        <div class="model-card">
+          <div class="model-header">
+            <span class="badge-rnn">ENSEMBLE</span>
+            <span class="model-params">RNN + CNN</span>
+          </div>
+          <div class="model-name">Traditional Ensemble</div>
+          <div class="model-desc">Combined predictive power of LSTM, CNN, and RCNN architectures via weighted voting.</div>
+          <div class="model-stat">
+            <span class="stat-label">Macro F1</span>
+            <span class="stat-value">0.8114</span>
+          </div>
+        </div>
+
+        <div class="model-card model-card-best">
+          <div class="model-header">
+            <span class="badge-trans">META ENSEMBLE</span>
+            <span class="model-params">All Models</span>
+          </div>
+          <div class="model-name">Full Ensemble <span class="best-tag">Best</span></div>
+          <div class="model-desc">Comprehensive pipeline aggregating traditional and transformer knowledge for absolute maximum performance.</div>
+          <div class="model-stat">
+            <span class="stat-label">Macro F1</span>
+            <span class="stat-value best">0.8629</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">04</span>
         <h2>Comparative Results</h2>
       </div>
-      <p>Experimental results indicate that pre-trained Transformer models significantly outperform custom-trained sequence models. However, the custom RCNN model shows strong performance while being significantly faster to train than fine-tuning a full Transformer.</p>
+      <p>Extensive benchmarking confirms that pre-trained Transformers heavily outpace traditional models, with RoBERTa achieving an individual accuracy of 88.82%. Crucially, combining all models into a final ensemble strategy yielded the absolute highest results across the board—surpassing 90% accuracy and 86% Macro F1.</p>
 
       <table class="results-table">
         <thead>
           <tr>
             <th>Model Name</th>
             <th>Accuracy</th>
-            <th>Training Time (sec)</th>
-            <th>Type</th>
+            <th>Macro F1</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>CNN</td>
-            <td>0.8156</td>
-            <td>497.68</td>
-            <td>Local Feature</td>
+            <td><strong>Ensemble (All Models)</strong></td>
+            <td class="best-cell">0.9014</td>
+            <td class="best-cell">0.8629</td>
           </tr>
           <tr>
-            <td>LSTM</td>
-            <td>0.8407</td>
-            <td>490.72</td>
-            <td>Sequential</td>
+            <td>RoBERTa (Base)</td>
+            <td>0.8882</td>
+            <td>0.8507</td>
+          </tr>
+          <tr>
+            <td>ALBERT (Base v2)</td>
+            <td>0.8843</td>
+            <td>0.8374</td>
+          </tr>
+          <tr>
+            <td>DistilBERT (Uncased)</td>
+            <td>0.8838</td>
+            <td>0.8428</td>
+          </tr>
+          <tr>
+            <td>Ensemble (RCNN, LSTM, CNN)</td>
+            <td>0.8586</td>
+            <td>0.8114</td>
           </tr>
           <tr>
             <td>RCNN</td>
-            <td>0.8540</td>
-            <td>496.89</td>
-            <td>Hybrid</td>
+            <td>0.8437</td>
+            <td>0.7945</td>
           </tr>
           <tr>
-            <td><strong>DistilBERT (Uncased)</strong></td>
-            <td class="best-cell">0.8864</td>
-            <td>4091.19</td>
-            <td>Transformer</td>
+            <td>LSTM</td>
+            <td>0.8380</td>
+            <td>0.7918</td>
+          </tr>
+          <tr>
+            <td>CNN</td>
+            <td>0.8063</td>
+            <td>0.7567</td>
           </tr>
         </tbody>
       </table>
     </div>
-  </div>
+
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2>Confusion Matrix Analysis</h2>
+      </div>
+      <p>Analyze the performance of individual models and ensembles by observing their confusion matrices. Enable Compare mode to evaluate two models side-by-side.</p>
+      
+      <div class="cm-controls">
+        <label class="toggle-control">
+          <input type="checkbox" id="cm-compare-toggle">
+          <span class="control-indicator"></span>
+          <span class="control-label">Compare side-by-side</span>
+        </label>
+      </div>
+
+      <div class="cm-viewer" id="cm-viewer">
+        <div class="cm-block" id="cm-block-1">
+          <select class="cm-select" id="cm-select-1">
+            <option value="cnn_cm">CNN</option>
+            <option value="lstm_cm">LSTM</option>
+            <option value="rcnn_cm">RCNN</option>
+            <option value="dis_cm">DistilBERT</option>
+            <option value="robert_cm" selected>RoBERTa</option>
+            <option value="albert_cm">ALBERT</option>
+            <option value="en3_cm">Ensemble (RCNN, LSTM, CNN)</option>
+            <option value="en6_cm">Ensemble (All Models)</option>
+          </select>
+          <img class="cm-img" id="cm-img-1" src="text_fig/robert_cm.png" alt="Confusion Matrix 1" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 600 500\'%3E%3Crect width=\'600\' height=\'500\' fill=\'%23f9f7f4\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'16px\' fill=\'%23a8a49f\'%3EImage Placeholder%3C/text%3E%3C/svg%3E'">
+        </div>
+
+        <div class="cm-block hidden" id="cm-block-2">
+          <select class="cm-select" id="cm-select-2">
+            <option value="cnn_cm">CNN</option>
+            <option value="lstm_cm">LSTM</option>
+            <option value="rcnn_cm">RCNN</option>
+            <option value="dis_cm">DistilBERT</option>
+            <option value="robert_cm">RoBERTa</option>
+            <option value="albert_cm">ALBERT</option>
+            <option value="en3_cm">Ensemble (RCNN, LSTM, CNN)</option>
+            <option value="en6_cm" selected>Ensemble (All Models)</option>
+          </select>
+          <img class="cm-img" id="cm-img-2" src="text_fig/en6_cm.png" alt="Confusion Matrix 2" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 600 500\'%3E%3Crect width=\'600\' height=\'500\' fill=\'%23f9f7f4\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'16px\' fill=\'%23a8a49f\'%3EImage Placeholder%3C/text%3E%3C/svg%3E'">
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- end page -->
 
   <footer style="padding: 32px 48px; text-align: center; font-size: 13px; color: var(--ink3); border-top: 1px solid var(--border);">
     CO3133 · Deep Learning Assignment Report · March 2026
   </footer>
 
+  <script>
+    const cmToggle = document.getElementById('cm-compare-toggle');
+    const cmViewer = document.getElementById('cm-viewer');
+    const cmBlock2 = document.getElementById('cm-block-2');
+    
+    const sel1 = document.getElementById('cm-select-1');
+    const sel2 = document.getElementById('cm-select-2');
+    const img1 = document.getElementById('cm-img-1');
+    const img2 = document.getElementById('cm-img-2');
+
+    cmToggle.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        cmViewer.classList.add('compare');
+        cmBlock2.classList.remove('hidden');
+      } else {
+        cmViewer.classList.remove('compare');
+        cmBlock2.classList.add('hidden');
+      }
+    });
+
+    sel1.addEventListener('change', (e) => {
+      img1.src = `text_fig/${e.target.value}.png`;
+    });
+
+    sel2.addEventListener('change', (e) => {
+      img2.src = `text_fig/${e.target.value}.png`;
+    });
+  </script>
 </body>
 </html>
