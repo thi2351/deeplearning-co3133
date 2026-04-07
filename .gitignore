@@ -50,6 +50,7 @@ desktop.ini
 # —— ML: dataset tải về (CIFAR-100 ~170MB+) ——
 ImageClassification/data/
 MultimodalClassification/data/
+archive_name.tar.gz
 
 # —— ML checkpoints (uncomment to track .pth or use Git LFS) ——
 ImageClassification/checkpoint/*.pth

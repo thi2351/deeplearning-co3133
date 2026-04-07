@@ -12,17 +12,55 @@
       --bg: #F9F7F4; --bg2: #F0EDE8; --ink: #1A1814; --ink2: #6B6760;
       --ink3: #A8A49F; --accent: #C5440A; --accent2: #E8593C;
       --border: rgba(26,24,20,0.10); --radius: 12px;
+      --green-bg: #E1F5EE; --green-ink: #085041;
+      --violet-bg: #EEEDFE; --violet-ink: #3C3489;
+      --amber-bg: #FFF3E8; --amber-ink: #9A4B0A;
     }
     html { scroll-behavior: smooth; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
 
-    header { border-bottom: 1px solid var(--border); padding: 0 48px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: rgba(249,247,244,0.92); backdrop-filter: blur(12px); z-index: 100; }
-    .logo { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--ink); text-decoration: none; letter-spacing: -0.02em; }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 0 48px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: rgba(249,247,244,0.92);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 17px;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
     .logo span { color: var(--accent); }
-    .back-btn { font-size: 13px; font-weight: 500; color: var(--ink2); text-decoration: none; transition: color 0.2s; }
+    .back-btn {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink2);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
     .back-btn:hover { color: var(--ink); }
 
-    .page { max-width: 900px; margin: 0 auto; padding: 64px 48px 96px; animation: fadeUp 0.6s ease both; }
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 64px 40px 96px;
+      animation: fadeUp 0.6s ease both;
+    }
 
     .assignment-parts {
       display: flex; gap: 8px 16px; flex-wrap: wrap; align-items: center;
@@ -33,22 +71,240 @@
     .assignment-parts a:hover { color: var(--accent); }
     .assignment-parts .current { color: var(--accent); font-weight: 600; }
 
-    .page-tag { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); border-radius: 20px; padding: 4px 12px; margin-bottom: 20px; }
-    h1 { font-family: 'DM Serif Display', serif; font-size: clamp(28px, 4vw, 44px); line-height: 1.15; letter-spacing: -0.03em; margin-bottom: 16px; }
+    .page-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 20px;
+      padding: 4px 12px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
     h1 em { font-style: italic; color: var(--accent); }
 
-    .placeholder-box {
-      background: #fff; border: 1px dashed var(--border); border-radius: var(--radius);
-      padding: 32px 28px; text-align: center; margin-top: 24px;
+    .page-meta {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
     }
-    .placeholder-box p { font-size: 15px; color: var(--ink2); max-width: 520px; margin: 0 auto 12px; }
-    .placeholder-note { font-size: 13px; color: var(--ink3); }
+    .meta-item { display: flex; flex-direction: column; gap: 2px; }
+    .meta-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink3);
+    }
+    .meta-value {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+    }
 
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .quick-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 20px 24px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 56px;
+    }
+    .link-btn {
+      font-size: 13px;
+      font-weight: 500;
+      padding: 7px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      color: var(--ink2);
+      background: var(--bg);
+      transition: all 0.15s;
+    }
+    .link-btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .link-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .link-btn.primary:hover { background: var(--accent2); border-color: var(--accent2); }
 
-    footer { padding: 32px 48px; text-align: center; font-size: 13px; color: var(--ink3); border-top: 1px solid var(--border); }
+    .section { margin-bottom: 56px; }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 13px;
+      color: var(--accent);
+      min-width: 24px;
+    }
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin: 22px 0 10px;
+    }
+    p {
+      font-size: 15px;
+      color: var(--ink2);
+      line-height: 1.75;
+      margin-bottom: 12px;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .overview-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .overview-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+    .overview-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+    .overview-sub { font-size: 12px; color: var(--ink3); margin-bottom: 6px; }
+    .overview-models { font-size: 12px; font-weight: 500; color: var(--accent); }
+
+    .approach-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .approach-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .approach-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .approach-card.best { border-color: rgba(197,68,10,0.3); background: #fffcfb; }
+    .approach-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .approach-name { font-size: 17px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
+    .approach-desc { font-size: 13px; color: var(--ink2); line-height: 1.6; margin-bottom: 14px; }
+    .approach-stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink3); }
+    .stat-value { font-size: 16px; font-weight: 500; color: var(--ink); }
+    .stat-value.best { color: var(--accent); }
+
+    .badge-zero { background: var(--violet-bg); color: var(--violet-ink); font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+    .badge-few { background: var(--amber-bg); color: var(--amber-ink); font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+    .badge-head { background: var(--green-bg); color: var(--green-ink); font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+    .best-tag { font-size: 10px; font-weight: 500; background: var(--accent); color: #fff; padding: 2px 7px; border-radius: 20px; }
+
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin-top: 16px;
+      background: #fff;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .results-table th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+    }
+    .results-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--ink);
+      vertical-align: top;
+    }
+    .results-table tr:last-child td { border-bottom: none; }
+    .results-table tr:hover td { background: var(--bg); }
+    .best-cell { font-weight: 500; color: var(--accent); }
+
+    ul.clean-list {
+      margin: 8px 0 0 18px;
+      color: var(--ink2);
+    }
+    ul.clean-list li {
+      margin-bottom: 8px;
+      line-height: 1.7;
+    }
+
+    .highlight {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-top: 16px;
+    }
+
+    .caption-note {
+      font-size: 13px;
+      color: var(--ink3);
+      margin-top: 10px;
+    }
+
+    footer {
+      padding: 32px 48px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--ink3);
+      border-top: 1px solid var(--border);
+    }
     footer a { color: var(--ink2); text-decoration: none; }
     footer a:hover { color: var(--accent); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 860px) {
+      .overview-grid, .approach-grid { grid-template-columns: 1fr; }
+    }
 
     @media (max-width: 700px) {
       header, footer { padding-left: 24px; padding-right: 24px; }
@@ -72,21 +328,295 @@
       <span class="current">Multimodal</span>
     </nav>
 
-    <div class="page-tag">Assignment 01 · Multimodal (placeholder)</div>
-    <h1><em>Multimodal</em> classification</h1>
-    <p style="font-size:15px;color:var(--ink2);max-width:640px;line-height:1.75;">
-      This page will host the multimodal track (e.g. image + text): dataset description, models (zero-shot vs few-shot), and results — aligned with the same Assignment&nbsp;01 scope as Image and Text.
-    </p>
+    <div class="page-tag">Assignment 01 · Multimodal classification</div>
+    <h1>Food Classification with<br><em>Multimodal CLIP + Text</em></h1>
 
-    <div class="placeholder-box">
-      <p><strong>Content coming soon.</strong></p>
-      <p class="placeholder-note">Replace this block with your report sections, figures, and tables when the multimodal experiment is ready.</p>
+    <div class="page-meta">
+      <div class="meta-item">
+        <span class="meta-label">Dataset</span>
+        <span class="meta-value">UPMC Food-101</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Task</span>
+        <span class="meta-value">101-class multimodal classification</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Core comparison</span>
+        <span class="meta-value">Zero-shot vs Few-shot + extension head</span>
+      </div>
     </div>
+
+    <div class="quick-links">
+      <a class="link-btn primary" href="https://github.com/YOUR_USERNAME/YOUR_REPO" target="_blank">↗ Source Code</a>
+      <a class="link-btn" href="reports/assignment1_slides.pdf" target="_blank">↓ Slide Deck</a>
+      <a class="link-btn" href="https://www.kaggle.com/datasets/gianmarco96/upmcfood101" target="_blank" rel="noopener">UPMC Food-101</a>
+      <a class="link-btn" href="#results">Jump to results</a>
+    </div>
+
+    <div class="section" id="overview">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2>Overview & dataset</h2>
+      </div>
+      <p>
+        This multimodal track studies food classification from paired <strong>image + text</strong> data.
+        The dataset contains real food images together with textual descriptions, which satisfies the course requirement
+        that multimodal data must be a true image–text pair rather than an artificial concatenation.
+      </p>
+      <p>
+        We use UPMC Food-101 with <strong>101 food classes</strong>. The metadata is loaded from CSV files, then each sample is
+        resolved to an image path, class name, textual description, and numeric label. This shared metadata layer is reused
+        for EDA, zero-shot evaluation, few-shot sampling, and the final supervised multimodal head.
+      </p>
+
+      <table class="results-table" aria-label="UPMC Food-101 overview">
+        <thead>
+          <tr><th>Property</th><th>Value</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Dataset</td><td>UPMC Food-101</td></tr>
+          <tr><td>Modalities</td><td>Food image + text description</td></tr>
+          <tr><td>Number of classes</td><td>101</td></tr>
+          <tr><td>Training samples</td><td>67,972</td></tr>
+          <tr><td>Test samples</td><td>22,716</td></tr>
+          <tr><td>Task</td><td>Multi-class classification</td></tr>
+        </tbody>
+      </table>
+
+      <div class="overview-grid">
+        <div class="overview-card">
+          <div class="overview-icon">🍜</div>
+          <div>
+            <div class="overview-title">Real multimodal pairs</div>
+            <div class="overview-sub">Image and text belong to the same food sample</div>
+            <div class="overview-models">Suitable for zero-shot and few-shot analysis</div>
+          </div>
+        </div>
+        <div class="overview-card">
+          <div class="overview-icon">🧠</div>
+          <div>
+            <div class="overview-title">Backbone</div>
+            <div class="overview-sub">OpenAI CLIP (ViT-B/32)</div>
+            <div class="overview-models">Shared embedding space for image and text</div>
+          </div>
+        </div>
+        <div class="overview-card">
+          <div class="overview-icon">🌐</div>
+          <div>
+            <div class="overview-title">Extension</div>
+            <div class="overview-sub">Module-first design + live demo</div>
+            <div class="overview-models">Ready for service / web API integration</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="pipeline">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2>CLIP foundation & multimodal pipeline</h2>
+      </div>
+      <p>
+        The core model is <strong>OpenAI CLIP</strong>, which uses one encoder for images and one encoder for text, then projects both
+        modalities into the same latent space. This shared representation allows us to compare foods using image evidence,
+        text evidence, or a fusion of both.
+      </p>
+      <p>
+        In our module-first implementation, each sample starts from metadata in CSV form, is transformed into a tuple
+        <code>(img_path, label, text, class_name)</code>, then passes through a PyTorch <code>Dataset</code> and <code>DataLoader</code>.
+        Images are converted to CLIP pixel values, text is tokenized by <code>CLIPProcessor</code>, and both are encoded to 512-dimensional
+        embeddings before entering one of three downstream strategies.
+      </p>
+
+      <h3>Downstream strategies</h3>
+      <div class="approach-grid">
+        <div class="approach-card">
+          <div class="approach-head">
+            <span class="badge-zero">Zero-shot</span>
+            <span class="stat-label">No training</span>
+          </div>
+          <div class="approach-name">Prompt-based fusion</div>
+          <div class="approach-desc">
+            We compare image and text embeddings against class prompts and combine both similarities with
+            a weighted score: <code>α · sim(image) + (1 − α) · sim(text)</code>, using <code>α = 0.5</code>.
+          </div>
+          <div class="approach-stat">
+            <span class="stat-label">Main benefit</span>
+            <span class="stat-value">Fast baseline</span>
+          </div>
+        </div>
+
+        <div class="approach-card">
+          <div class="approach-head">
+            <span class="badge-few">Few-shot</span>
+            <span class="stat-label">Low-data</span>
+          </div>
+          <div class="approach-name">CLIP + Logistic Regression</div>
+          <div class="approach-desc">
+            We concatenate image and text embeddings into a 1024-D multimodal vector and train
+            a linear <code>LogisticRegression</code> classifier with <code>K ∈ {1, 5, 10}</code> samples per class.
+          </div>
+          <div class="approach-stat">
+            <span class="stat-label">Main benefit</span>
+            <span class="stat-value">Strong trade-off</span>
+          </div>
+        </div>
+
+        <div class="approach-card best">
+          <div class="approach-head">
+            <span class="badge-head">Extension</span>
+            <span class="best-tag">Best</span>
+          </div>
+          <div class="approach-name">Fine-tuned Multimodal Head</div>
+          <div class="approach-desc">
+            CLIP is kept frozen, while a compact MLP head is trained on cached image/text features.
+            This gives a supervised multimodal classifier with strong performance and practical deployment cost.
+          </div>
+          <div class="approach-stat">
+            <span class="stat-label">Main benefit</span>
+            <span class="stat-value best">Highest accuracy</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="results">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2>Comparative results</h2>
+      </div>
+      <p>
+        Following the course requirement for multimodal classification, we first compare <strong>zero-shot</strong> and
+        <strong>few-shot</strong> approaches on the same CLIP backbone. We then report a stronger supervised extension,
+        the fine-tuned multimodal head, as an additional comparison for performance analysis.
+      </p>
+
+      <table class="results-table" aria-label="Multimodal results summary">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Accuracy</th>
+            <th>Macro-F1</th>
+            <th>Interpretation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Zero-Shot CLIP (multimodal, α = 0.50)</td>
+            <td>0.8296</td>
+            <td>0.8337</td>
+            <td>Strong baseline without extra training</td>
+          </tr>
+          <tr>
+            <td>Few-Shot CLIP K = 1 + Logistic Regression</td>
+            <td>0.5731</td>
+            <td>0.5538</td>
+            <td>Too little supervision to separate classes well</td>
+          </tr>
+          <tr>
+            <td>Few-Shot CLIP K = 5 + Logistic Regression</td>
+            <td>0.8048</td>
+            <td>0.8095</td>
+            <td>Approaches zero-shot with limited labels</td>
+          </tr>
+          <tr>
+            <td>Few-Shot CLIP K = 10 + Logistic Regression</td>
+            <td>0.8517</td>
+            <td>0.8537</td>
+            <td>Best few-shot setting; surpasses zero-shot</td>
+          </tr>
+          <tr>
+            <td><strong>Fine-tuned Multimodal Head</strong></td>
+            <td class="best-cell">0.9383</td>
+            <td class="best-cell">0.9380</td>
+            <td class="best-cell">Best overall result</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="highlight">
+        <p>
+          <strong>Main takeaway.</strong> Zero-shot CLIP already provides a strong multimodal baseline with no additional training.
+          However, once a small number of labeled examples per class is available, few-shot learning improves rapidly.
+          At <strong>K = 10</strong>, the few-shot classifier overtakes zero-shot. The supervised multimodal head remains the best model overall,
+          reaching <strong>93.83% accuracy</strong> and <strong>93.80% macro-F1</strong>.
+        </p>
+      </div>
+    </div>
+
+    <div class="section" id="analysis">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2>Error analysis</h2>
+      </div>
+      <p>
+        Most remaining errors come from visually and semantically similar dishes, which makes Food-101 a fine-grained classification task.
+        The model often confuses food classes that share ingredients, plating style, or raw-food appearance.
+      </p>
+
+      <table class="results-table" aria-label="Top confused class pairs">
+        <thead>
+          <tr>
+            <th>Count</th>
+            <th>True class</th>
+            <th>Predicted as</th>
+            <th>Observation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>20</td><td>tuna_tartare</td><td>beef_tartare</td><td>Same presentation style, raw diced topping dishes</td></tr>
+          <tr><td>9</td><td>sushi</td><td>sashimi</td><td>Visually close seafood-based Japanese dishes</td></tr>
+          <tr><td>8</td><td>tuna_tartare</td><td>sashimi</td><td>Shared raw fish cues</td></tr>
+          <tr><td>8</td><td>sashimi</td><td>sushi</td><td>Fine-grained boundary between classes</td></tr>
+          <tr><td>8</td><td>gyoza</td><td>dumplings</td><td>Almost identical shape and plating</td></tr>
+          <tr><td>8</td><td>foie_gras</td><td>beef_tartare</td><td>High visual ambiguity in plated appetizers</td></tr>
+          <tr><td>7</td><td>beef_tartare</td><td>tuna_tartare</td><td>Raw dish confusion remains symmetric</td></tr>
+          <tr><td>7</td><td>beef_carpaccio</td><td>beef_tartare</td><td>Same ingredient family, similar color and garnish</td></tr>
+          <tr><td>6</td><td>seaweed_salad</td><td>sashimi</td><td>Green/raw seafood side dishes with close textures</td></tr>
+          <tr><td>6</td><td>ravioli</td><td>lasagna</td><td>Pasta-based dishes with overlapping sauce patterns</td></tr>
+        </tbody>
+      </table>
+
+      <ul class="clean-list">
+        <li>The most frequent confusion is <strong>tuna_tartare → beef_tartare</strong>, indicating that the model still struggles with dishes that differ mainly by ingredient identity rather than overall presentation.</li>
+        <li>Japanese dishes such as <strong>sushi</strong> and <strong>sashimi</strong> are repeatedly confused, which is consistent with their visual similarity in real food photos.</li>
+        <li>Several errors occur between appetizer-style dishes and plated cold dishes, suggesting that local texture cues alone are not always enough for perfect discrimination.</li>
+      </ul>
+    </div>
+
+    <div class="section" id="extensions">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2>Extension: deployment-oriented design</h2>
+      </div>
+      <p>
+        Besides model comparison, the multimodal part is organized in a <strong>module-first</strong> way. The codebase separates
+        <code>data_loader</code>, <code>baselines</code>, <code>trainer</code>, <code>service</code>, and <code>web_api</code>, so the notebook is used mainly
+        for experimentation and visualisation while the underlying system remains ready for integration into a lightweight web demo.
+      </p>
+      <p>
+        This design matches the course suggestion of building a small demo application. In our setup, a user can upload a food image,
+        provide a short text description, and receive predictions from zero-shot, few-shot, or the fine-tuned head through the same interface.
+      </p>
+      <div class="highlight">
+        <p>
+          <strong>Conclusion.</strong> For the assignment requirement, zero-shot and few-shot already provide a valid and meaningful multimodal comparison.
+          As an extension, the fine-tuned multimodal head offers the strongest final performance, while the module-first pipeline supports future
+          deployment on GitHub Pages documentation plus a live demo backend.
+        </p>
+      </div>
+      <p class="caption-note">
+        Suggested additions for the final landing page: demo video link, report slides, notebook link, and screenshots of the web interface.
+      </p>
+    </div>
+
   </div>
 
   <footer>
-    CO3133 · Assignment 01 · Multimodal placeholder &nbsp;·&nbsp;
+    CO3133 · Assignment 01 · Multimodal report &nbsp;·&nbsp;
     <a href="../index.html">← Home</a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/YOUR_USERNAME/YOUR_REPO" target="_blank">GitHub ↗</a>
   </footer>
 
 </body>
