@@ -126,11 +126,23 @@ class CollateWithProcessor:
 
 def _resolve_dataset_root(dataset_root: Optional[str]) -> Path:
     if dataset_root is None:
-        import kagglehub
+        # Prefer module-local data first so notebook/web remain self-contained.
+        local_root = Path(__file__).resolve().parents[1] / "data"
+        local_has_layout = (
+            (local_root / "texts" / "train_titles.csv").exists()
+            and (local_root / "texts" / "test_titles.csv").exists()
+            and (local_root / "images" / "train").exists()
+            and (local_root / "images" / "test").exists()
+        )
+        if local_has_layout:
+            print(f"[data_loader] Using local module data: {local_root}")
+            dataset_root = str(local_root)
+        else:
+            import kagglehub
 
-        print(f"[data_loader] Downloading '{KAGGLE_DATASET_HANDLE}' via kagglehub …")
-        dataset_root = kagglehub.dataset_download(KAGGLE_DATASET_HANDLE)
-        print(f"[data_loader] Dataset cached at: {dataset_root}")
+            print(f"[data_loader] Downloading '{KAGGLE_DATASET_HANDLE}' via kagglehub …")
+            dataset_root = kagglehub.dataset_download(KAGGLE_DATASET_HANDLE)
+            print(f"[data_loader] Dataset cached at: {dataset_root}")
 
     root_path = Path(dataset_root)
     subdirs = [d for d in root_path.iterdir() if d.is_dir()]

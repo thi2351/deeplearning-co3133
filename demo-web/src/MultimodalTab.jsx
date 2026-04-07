@@ -4,9 +4,11 @@ import { TopKChart } from "./TopKChart.jsx";
 
 export function MultimodalTab() {
   const [datasetSamples, setDatasetSamples] = useState([]);
+  const [samplesTotal, setSamplesTotal] = useState(0);
   const [samplesLoading, setSamplesLoading] = useState(true);
   const [samplesErr, setSamplesErr] = useState(null);
   const [sampleId, setSampleId] = useState(null);
+  const [sampleIndexInput, setSampleIndexInput] = useState("");
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [text, setText] = useState("");
@@ -21,12 +23,14 @@ export function MultimodalTab() {
   useEffect(() => {
     setSamplesLoading(true);
     setSamplesErr(null);
-    fetchJsonOk(apiMultimodal("/dataset-samples?count=9"))
+    fetchJsonOk(apiMultimodal("/dataset-samples?count=20"))
       .then((data) => {
         setDatasetSamples(Array.isArray(data.samples) ? data.samples : []);
+        setSamplesTotal(Number.isFinite(Number(data.total)) ? Number(data.total) : 0);
       })
       .catch((e) => {
         setDatasetSamples([]);
+        setSamplesTotal(0);
         setSamplesErr(e?.message || String(e));
       })
       .finally(() => setSamplesLoading(false));
@@ -55,6 +59,7 @@ export function MultimodalTab() {
       const f = new File([blob], `${item.id || "sample"}.${ext}`, { type: blob.type || "image/png" });
 
       setSampleId(String(item.id ?? ""));
+      setSampleIndexInput(String(item.index ?? ""));
       setFile(f);
       setText(item.text || "");
       setResult(null);
@@ -69,6 +74,25 @@ export function MultimodalTab() {
       setError(e?.message || String(e));
     }
   }, []);
+
+  const pickSampleByIndex = useCallback(async () => {
+    const idx = Number(sampleIndexInput);
+    if (!Number.isInteger(idx)) {
+      setError("Index sample phải là số nguyên.");
+      return;
+    }
+    if (idx < 0 || (samplesTotal > 0 && idx >= samplesTotal)) {
+      setError(`Index phải trong khoảng 0..${Math.max(0, samplesTotal - 1)}`);
+      return;
+    }
+    try {
+      const data = await fetchJsonOk(apiMultimodal(`/dataset-samples?index=${idx}`));
+      if (!data?.sample) throw new Error("Không tìm thấy sample theo index");
+      await pickSample(data.sample);
+    } catch (e) {
+      setError(e?.message || String(e));
+    }
+  }, [pickSample, sampleIndexInput, samplesTotal]);
 
   const predict = useCallback(async () => {
     if (!file) {
@@ -242,9 +266,29 @@ export function MultimodalTab() {
         </p>
         {samplesLoading && <p className="demo-hint">Đang tải mẫu…</p>}
         {samplesErr && <div className="demo-alert demo-alert--error">{samplesErr}</div>}
+        <div className="demo-index-row" style={{ marginBottom: 10 }}>
+          <label className="demo-field-label" htmlFor="mm-sample-index" style={{ margin: 0 }}>
+            Chọn sample theo index
+          </label>
+          <input
+            id="mm-sample-index"
+            type="number"
+            min="0"
+            max={Math.max(0, datasetSamples.length - 1)}
+            value={sampleIndexInput}
+            onChange={(e) => setSampleIndexInput(e.target.value)}
+            className="demo-input-num"
+            style={{ width: 120 }}
+            placeholder="VD: 12"
+          />
+          <button type="button" className="demo-btn-secondary" onClick={pickSampleByIndex}>
+            Load index
+          </button>
+          <span className="demo-hint-inline">0..{Math.max(0, samplesTotal - 1)}</span>
+        </div>
         <div className="demo-sample-grid">
           {datasetSamples.map((item) => {
-            const key = String(item.id ?? "");
+            const key = String(item.id ?? item.index ?? "");
             return (
               <button
                 key={key}
@@ -259,7 +303,7 @@ export function MultimodalTab() {
               >
                 <img src={item.image_url} alt={item.label || key} />
                 <span className="demo-sample-cap">{item.label || key}</span>
-                <span className="demo-sample-idx">#{key}</span>
+                <span className="demo-sample-idx">#{item.index ?? key}</span>
               </button>
             );
           })}

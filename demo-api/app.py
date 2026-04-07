@@ -368,12 +368,20 @@ def _register_multimodal_routes() -> None:
         if env_root:
             return Path(env_root).expanduser().resolve()
 
+<<<<<<< HEAD
         local_test_root = (Path(MM_DATA_DIR).resolve() / "test").resolve()
         if local_test_root.is_dir():
             return local_test_root
 
         # Fallback to a common kagglehub cache location when the repo-local
         # sample tree is unavailable.
+=======
+        local_root = (Path(MM_DATA_DIR) / "images" / "test").resolve()
+        if local_root.is_dir():
+            return local_root
+
+        # Default to common kagglehub cache location.
+>>>>>>> 68c96d6 (Modify multimodal)
         return (
             Path.home()
             / ".cache"
@@ -556,25 +564,40 @@ def _register_multimodal_routes() -> None:
     @mm_bp.get("/dataset-samples")
     def mm_dataset_samples():
         try:
-            count = min(24, max(1, int(request.args.get("count", 9))))
+            count = min(512, max(1, int(request.args.get("count", 9))))
         except ValueError:
             return jsonify(error="bad count"), 400
 
+        index_arg = request.args.get("index", "").strip()
+
         try:
-            rows = load_mm_demo_samples(MM_DEMO_SAMPLES_PATH)
+            rows = load_mm_demo_samples(MM_DEMO_SAMPLES_PATH, strict_text=True, min_text_len=3)
         except Exception as e:
             return jsonify(error=f"Cannot read multimodal samples: {e}"), 500
 
         if not rows:
             return jsonify(samples=[], warning="No multimodal demo samples found.")
 
-        items = []
-        for row in rows[:count]:
+        def _format_item(row: dict, idx: int) -> dict:
             item = dict(row)
+            item["index"] = idx
             image_rel = str(item.get("image_rel", "")).strip()
             if image_rel:
                 item["image_url"] = f"/api/mm/sample-image?path={quote(image_rel)}"
-            items.append(item)
+            return item
+
+        if index_arg:
+            try:
+                idx = int(index_arg)
+            except ValueError:
+                return jsonify(error="bad index"), 400
+            if idx < 0 or idx >= len(rows):
+                return jsonify(error="index out of range"), 400
+            return jsonify(sample=_format_item(rows[idx], idx), total=len(rows))
+
+        items = []
+        for idx, row in enumerate(rows[:count]):
+            items.append(_format_item(row, idx))
 
         return jsonify(samples=items, total=len(rows))
 

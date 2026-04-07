@@ -41,7 +41,11 @@ def build_service(
     )
 
 
-def load_demo_samples(path: str | Path = DEMO_SAMPLES_PATH) -> List[Dict[str, Any]]:
+def load_demo_samples(
+    path: str | Path = DEMO_SAMPLES_PATH,
+    strict_text: bool = True,
+    min_text_len: int = 3,
+) -> List[Dict[str, Any]]:
     p = Path(path)
     if not p.is_file():
         return []
@@ -57,12 +61,16 @@ def load_demo_samples(path: str | Path = DEMO_SAMPLES_PATH) -> List[Dict[str, An
         image_url = str(row.get("image_url", "")).strip()
         image_rel = str(row.get("image_rel", row.get("image_file", ""))).strip()
         text = str(row.get("text", "")).strip()
-        if not text or (not image_url and not image_rel):
+        if (not image_url and not image_rel):
+            continue
+        if strict_text and len(text) < min_text_len:
+            continue
+        if not strict_text and not text:
             continue
 
         sample: Dict[str, Any] = {
             "id": str(row.get("id", "")) or f"sample-{len(out)}",
-            "text": text,
+                "text": text,
             "label": str(row.get("label", "")).strip(),
         }
         if image_url:
