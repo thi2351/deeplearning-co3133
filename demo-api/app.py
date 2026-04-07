@@ -368,7 +368,12 @@ def _register_multimodal_routes() -> None:
         if env_root:
             return Path(env_root).expanduser().resolve()
 
-        # Default to common kagglehub cache location.
+        local_test_root = (Path(MM_DATA_DIR).resolve() / "test").resolve()
+        if local_test_root.is_dir():
+            return local_test_root
+
+        # Fallback to a common kagglehub cache location when the repo-local
+        # sample tree is unavailable.
         return (
             Path.home()
             / ".cache"
@@ -481,7 +486,8 @@ def _register_multimodal_routes() -> None:
                 return jsonify(
                     error=(
                         f"Few-shot dataset root not found: {dataset_root}. "
-                        "Set MM_DATASET_ROOT to the Food-101 class folder."
+                        "Set MM_DATASET_ROOT to a Food-101 class-folder root, or keep "
+                        "MultimodalClassification/data/test available for the default fallback."
                     )
                 ), 503
         except Exception as e:
