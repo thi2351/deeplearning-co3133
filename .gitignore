@@ -49,6 +49,7 @@ desktop.ini
 
 # —— ML: dataset tải về (CIFAR-100 ~170MB+) ——
 ImageClassification/data/
+MultimodalClassification/data/
 
 # —— ML checkpoints (uncomment to track .pth or use Git LFS) ——
 ImageClassification/checkpoint/*.pth
@@ -61,3 +62,6 @@ lightning_logs/
 
 # —— Jupyter ——
 .ipynb_checkpoints/
+
+run_all.sh
+setup_once.sh

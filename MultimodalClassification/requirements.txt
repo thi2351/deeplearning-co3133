@@ -1,0 +1,13 @@
+# Multimodal module dependencies
+# Install from repo root with:
+#   pip install -r MultimodalClassification/requirements.txt
+
+torch>=2.0
+torchvision
+transformers>=4.36
+pillow
+numpy
+pandas
+scikit-learn
+tqdm
+kagglehub
